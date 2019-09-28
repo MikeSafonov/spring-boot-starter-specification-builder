@@ -1,0 +1,137 @@
+plugins {
+    id "java"
+    id "jacoco"
+    id "io.spring.dependency-management" version "1.0.8.RELEASE"
+}
+
+apply plugin: "java-library"
+apply plugin: "maven"
+apply plugin: "signing"
+
+ext { springBootVersion = "2.1.8.RELEASE" }
+
+group "com.github.mikesafonov"
+version "1.0.0"
+
+sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = "UTF-8"
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+    dependencies {
+        dependencySet(group:"org.junit.jupiter", version: "5.5.2") {
+            entry "junit-jupiter-api"
+            entry "junit-jupiter-engine"
+            entry "junit-jupiter-params"
+        }
+        dependencySet(group:"org.junit.platform", version: "1.5.2") {
+            entry "junit-platform-engine"
+            entry "junit-platform-commons"
+        }
+    }
+}
+
+jar {
+    enabled = true
+}
+
+configurations {
+    compile.exclude module: "spring-boot-starter-logging"
+}
+
+dependencies {
+    implementation ("org.springframework.boot:spring-boot-starter")
+
+    testImplementation ("org.springframework.boot:spring-boot-starter-test")
+    testImplementation ("org.junit.jupiter:junit-jupiter:5.5.2")
+}
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourceJar
+    archives javadocJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled false
+    }
+}
+
+// Build, sign, and upload
+uploadArchives {
+    repositories {
+        mavenDeployer {
+
+            // Sign POM
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            // Destination
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+
+            // Add required metadata to POM
+            pom.project {
+                name "spring-boot-starter-specification-builder"
+                packaging "jar"
+                description "Spring Boot starter for building specifications in declarative way"
+                url "https://github.com/MikeSafonov/spring-boot-starter-specification-builder"
+                organization {
+                    name "com.github.mikesafonov"
+                    url "https://github.com/MikeSafonov"
+                }
+                issueManagement {
+                    system "GitHub"
+                    url "https://github.com/MikeSafonov/spring-boot-starter-specification-builder/issues"
+                }
+                licenses {
+                    license {
+                        name "MIT"
+                        url "https://github.com/MikeSafonov/spring-boot-starter-specification-builder/blob/master/LICENSE"
+                        distribution "repo"
+                    }
+                }
+                scm {
+                    url "https://github.com/MikeSafonov/spring-boot-starter-specification-builder"
+                    connection "scm:git:git://github.com/MikeSafonov/spring-boot-starter-specification-builder.git"
+                    developerConnection "scm:git:ssh://git@github.com:MikeSafonov/spring-boot-starter-specification-builder.git"
+                }
+                developers {
+                    developer {
+                        name "Mike Safonov"
+                        organization "com.github.mikesafonov"
+                        organizationUrl "https://github.com/MikeSafonov"
+                    }
+                }
+            }
+        }
+    }
+}
