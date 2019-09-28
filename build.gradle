@@ -53,6 +53,7 @@ dependencies {
 
     testImplementation ("org.springframework.boot:spring-boot-starter-test")
     testImplementation ("org.junit.jupiter:junit-jupiter:5.5.2")
+    testImplementation 'com.h2database:h2:1.4.197'
 }
 
 task sourceJar(type: Jar) {
