@@ -5,5 +5,4 @@ out/
 .idea/
 *.log
 *-dev.properties
-gradle.properties
 .pitest/
