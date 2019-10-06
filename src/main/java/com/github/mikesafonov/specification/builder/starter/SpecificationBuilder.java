@@ -10,6 +10,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -53,6 +54,9 @@ public class SpecificationBuilder {
     private <S> Predicate toPredicate(Root<S> root, CriteriaBuilder cb, Field field, String fieldName,
                                       Object fieldValue) {
         Expression expression = getExpression(root, field, fieldName);
+        if(Collection.class.isAssignableFrom(fieldValue.getClass())){
+            return expression.in(fieldValue);
+        }
         if (field.isAnnotationPresent(Like.class)) {
             return toLikePredicate(cb, field.getAnnotation(Like.class),
                     expression, fieldValue);
