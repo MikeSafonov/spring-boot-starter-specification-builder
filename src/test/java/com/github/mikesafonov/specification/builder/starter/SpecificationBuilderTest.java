@@ -30,7 +30,7 @@ class SpecificationBuilderTest {
     void shouldFindById(){
         CarFilter carFilter = new CarFilter();
         carFilter.setId(1);
-        List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(CarEntity.class, carFilter));
+        List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(carFilter));
         Assertions.assertEquals(1, data.size());
     }
 }

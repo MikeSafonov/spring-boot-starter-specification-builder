@@ -24,9 +24,7 @@ public class SpecificationBuilder {
 
     private static final String SERIAL_VERSION_UID_NAME = "serialVersionUID";
 
-    private final ExpressionBuilder expressionBuilder = new ExpressionBuilder();
-
-    public <F, S> Specification<S> buildSpecification(Class<S> specClass, F filter) {
+    public <F, S> Specification<S> buildSpecification(F filter) {
         List<Field> fields = Utils.getFields(filter);
         return (root, query, cb) -> cb.and(fields.stream()
                 .filter(this::isFieldSupported)

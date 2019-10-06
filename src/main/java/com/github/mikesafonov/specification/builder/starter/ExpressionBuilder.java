@@ -1,6 +1,7 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Join;
+import lombok.experimental.UtilityClass;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
@@ -9,6 +10,7 @@ import java.lang.reflect.Field;
 /**
  * @author MikeSafonov
  */
+@UtilityClass
 class ExpressionBuilder {
 
     /**

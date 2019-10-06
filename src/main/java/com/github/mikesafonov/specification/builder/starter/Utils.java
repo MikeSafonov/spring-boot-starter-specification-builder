@@ -1,5 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter;
 
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.lang.NonNull;
@@ -15,6 +16,7 @@ import static java.util.stream.Collectors.toList;
  * @author Mike Safonov
  */
 @Slf4j
+@UtilityClass
 class Utils {
 
     /**
