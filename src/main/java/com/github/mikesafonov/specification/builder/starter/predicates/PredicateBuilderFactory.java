@@ -19,7 +19,8 @@ public class PredicateBuilderFactory {
 
     public static PredicateBuilder createPredicateBuilder(CriteriaBuilder cb, Field field, Object fieldValue) {
         if (Collection.class.isAssignableFrom(fieldValue.getClass())) {
-            return new CollectionPredicateBuilder(fieldValue);
+            Collection collection = (Collection) fieldValue;
+            return new CollectionPredicateBuilder(collection);
         }
         if (field.isAnnotationPresent(Like.class)) {
             return new LikePredicateBuilder(cb, field.getAnnotation(Like.class), fieldValue);

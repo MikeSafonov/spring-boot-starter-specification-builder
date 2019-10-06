@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
+import java.util.Collection;
 
 /**
  * Builder for collection {@code in} predicate
@@ -12,10 +13,11 @@ import javax.persistence.criteria.Predicate;
  */
 @RequiredArgsConstructor
 public class CollectionPredicateBuilder implements PredicateBuilder {
-    private final Object fieldValue;
+    private final Collection fieldValue;
 
     @Override
     public Predicate build(Expression expression) {
-        return expression.in(fieldValue);
+        Object[] objects = fieldValue.toArray(new Object[0]);
+        return expression.in(objects);
     }
 }
