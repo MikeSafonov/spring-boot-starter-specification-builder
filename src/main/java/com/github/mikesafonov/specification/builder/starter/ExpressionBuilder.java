@@ -6,18 +6,28 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 
+/**
+ * @author MikeSafonov
+ */
 class ExpressionBuilder {
 
-    <S> Expression getExpression(Root<S> root, Field field, String fieldName) {
+    /**
+     * @param root          entity root
+     * @param field         field for expression
+     * @param attributeName attribute name
+     * @param <E>           entity type
+     * @return return attribute expression from root or joined attribute expression via {@link Join}
+     */
+    static <E> Expression getExpression(Root<E> root, Field field, String attributeName) {
         if (field.isAnnotationPresent(Join.class)) {
             Join[] joins = field.getAnnotationsByType(Join.class);
             javax.persistence.criteria.Join<Object, Object> join = root.join(joins[0].value(), joins[0].type());
             for (int i = 1; i < joins.length; i++) {
                 join = join.join(joins[i].value(), joins[i].type());
             }
-            return join.get(fieldName);
+            return join.get(attributeName);
         } else {
-            return root.get(fieldName);
+            return root.get(attributeName);
         }
     }
 

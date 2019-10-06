@@ -1,7 +1,10 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 
-import com.github.mikesafonov.specification.builder.starter.annotations.*;
+import com.github.mikesafonov.specification.builder.starter.annotations.Ignore;
+import com.github.mikesafonov.specification.builder.starter.annotations.Name;
+import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilder;
+import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilderFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -10,7 +13,6 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,7 +22,6 @@ import java.util.Objects;
 @Slf4j
 public class SpecificationBuilder {
 
-    private static final String PERCENT = "%";
     private static final String SERIAL_VERSION_UID_NAME = "serialVersionUID";
 
     private final ExpressionBuilder expressionBuilder = new ExpressionBuilder();
@@ -55,45 +56,8 @@ public class SpecificationBuilder {
 
     private <S> Predicate toPredicate(Root<S> root, CriteriaBuilder cb, Field field, String fieldName,
                                       Object fieldValue) {
-        Expression expression = expressionBuilder.getExpression(root, field, fieldName);
-        if(Collection.class.isAssignableFrom(fieldValue.getClass())){
-            return expression.in(fieldValue);
-        }
-        if (field.isAnnotationPresent(Like.class)) {
-            return toLikePredicate(cb, field.getAnnotation(Like.class),
-                    expression, fieldValue);
-        } else if (field.isAnnotationPresent(NonNull.class)) {
-            return cb.isNotNull(expression);
-        } else if (field.isAnnotationPresent(IsNull.class)) {
-            return cb.isNull(expression);
-        } else {
-            return cb.equal(expression, fieldValue);
-        }
-    }
-
-    private Predicate toLikePredicate(CriteriaBuilder cb, Like like,
-                                      Expression<String> expression,
-                                      Object fieldValue) {
-        String searchValue = getSearchValue(fieldValue, like.direction());
-        Expression<String> expr = expression;
-        if (!like.caseSensitive()) {
-            expr = cb.upper(expr);
-            searchValue = searchValue.toUpperCase();
-        }
-        return cb.like(expr, searchValue);
-    }
-
-    private String getSearchValue(Object fieldValue, Like.DIRECTION direction) {
-        switch (direction) {
-            case LEFT: {
-                return PERCENT + fieldValue;
-            }
-            case RIGHT: {
-                return fieldValue + PERCENT;
-            }
-            default: {
-                return PERCENT + fieldValue + PERCENT;
-            }
-        }
+        Expression expression = ExpressionBuilder.getExpression(root, field, fieldName);
+        PredicateBuilder predicateBuilder = PredicateBuilderFactory.createPredicateBuilder(cb, field, fieldValue);
+        return predicateBuilder.build(expression);
     }
 }
