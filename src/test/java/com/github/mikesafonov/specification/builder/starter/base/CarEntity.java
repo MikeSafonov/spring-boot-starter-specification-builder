@@ -35,4 +35,8 @@ public class CarEntity {
     public void setNumber(String number) {
         this.number = number;
     }
+
+    public CarModel getModel() {
+        return model;
+    }
 }
