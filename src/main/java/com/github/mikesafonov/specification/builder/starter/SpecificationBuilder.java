@@ -23,6 +23,8 @@ public class SpecificationBuilder {
     private static final String PERCENT = "%";
     private static final String SERIAL_VERSION_UID_NAME = "serialVersionUID";
 
+    private final ExpressionBuilder expressionBuilder = new ExpressionBuilder();
+
     public <F, S> Specification<S> buildSpecification(Class<S> specClass, F filter) {
         List<Field> fields = Utils.getFields(filter);
         return (root, query, cb) -> cb.and(fields.stream()
@@ -53,7 +55,7 @@ public class SpecificationBuilder {
 
     private <S> Predicate toPredicate(Root<S> root, CriteriaBuilder cb, Field field, String fieldName,
                                       Object fieldValue) {
-        Expression expression = getExpression(root, field, fieldName);
+        Expression expression = expressionBuilder.getExpression(root, field, fieldName);
         if(Collection.class.isAssignableFrom(fieldValue.getClass())){
             return expression.in(fieldValue);
         }
@@ -66,19 +68,6 @@ public class SpecificationBuilder {
             return cb.isNull(expression);
         } else {
             return cb.equal(expression, fieldValue);
-        }
-    }
-
-    private <S> Expression getExpression(Root<S> root, Field field, String fieldName) {
-        if (field.isAnnotationPresent(Join.class)) {
-            Join[] joins = field.getAnnotationsByType(Join.class);
-            javax.persistence.criteria.Join<Object, Object> join = root.join(joins[0].value(), joins[0].type());
-            for (int i = 1; i < joins.length; i++) {
-                join = join.join(joins[i].value(), joins[i].type());
-            }
-            return join.get(fieldName);
-        } else {
-            return root.get(fieldName);
         }
     }
 
