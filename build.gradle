@@ -44,16 +44,17 @@ configurations {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
 
-    implementation("org.slf4j:slf4j-api")
+    implementation ("org.slf4j:slf4j-api")
+    implementation ("org.apache.commons:commons-lang3")
 
-    compileOnly("org.projectlombok:lombok:1.18.10")
-    annotationProcessor("org.projectlombok:lombok:1.18.10")
+    compileOnly ("org.projectlombok:lombok:1.18.10")
+    annotationProcessor ("org.projectlombok:lombok:1.18.10")
 
     testImplementation ("org.springframework.boot:spring-boot-starter-test")
     testImplementation ("org.junit.jupiter:junit-jupiter:5.5.2")
-    testImplementation 'com.h2database:h2:1.4.197'
+    testImplementation ("com.h2database:h2:1.4.197")
 }
 
 task sourceJar(type: Jar) {

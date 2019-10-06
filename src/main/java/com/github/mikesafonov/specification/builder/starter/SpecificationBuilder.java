@@ -23,8 +23,7 @@ public class SpecificationBuilder {
     private static final String SERIAL_VERSION_UID_NAME = "serialVersionUID";
 
     public <F, S> Specification<S> buildSpecification(Class<S> specClass, F filter) {
-        Class<?> filterClass = filter.getClass();
-        List<Field> fields = Utils.getFields(filterClass);
+        List<Field> fields = Utils.getFields(filter);
         return (root, query, cb) -> cb.and(fields.stream()
                 .filter(this::isFieldSupported)
                 .map(field -> toPredicate(field, root, cb, filter))
