@@ -1,7 +1,8 @@
 package com.github.mikesafonov.specification.builder.starter.base;
 
-import com.github.mikesafonov.specification.builder.starter.annotations.Join;
-import com.github.mikesafonov.specification.builder.starter.annotations.Name;
+import com.github.mikesafonov.specification.builder.starter.annotations.*;
+
+import java.util.Collection;
 
 public class CarFilter {
     private Integer id;
@@ -12,6 +13,15 @@ public class CarFilter {
     @Join(value = "model")
     @Name(value = "name")
     private String model;
+    @Like
+    private String likeValue;
+
+    @NonNull
+    private String nonNullValue;
+    @IsNull
+    private String nullValue;
+    @IsNull
+    private Collection collection;
 
     public Integer getId() {
         return id;
