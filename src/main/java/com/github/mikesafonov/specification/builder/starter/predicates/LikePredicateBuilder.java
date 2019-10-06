@@ -22,7 +22,7 @@ public class LikePredicateBuilder implements PredicateBuilder {
 
     @Override
     public Predicate build(Expression expression) {
-        String searchValue = getSearchValue(fieldValue, like.direction());
+        String searchValue = getSearchValue();
         Expression<String> expr = expression;
         if (!like.caseSensitive()) {
             expr = cb.upper(expr);
@@ -31,8 +31,8 @@ public class LikePredicateBuilder implements PredicateBuilder {
         return cb.like(expr, searchValue);
     }
 
-    private String getSearchValue(Object fieldValue, Like.DIRECTION direction) {
-        switch (direction) {
+    private String getSearchValue() {
+        switch (like.direction()) {
             case LEFT: {
                 return PERCENT + fieldValue;
             }
