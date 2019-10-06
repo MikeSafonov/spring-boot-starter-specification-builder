@@ -68,8 +68,12 @@ public class SpecificationBuilder {
 
     private <S> Expression getExpression(Root<S> root, Field field, String fieldName) {
         if (field.isAnnotationPresent(Join.class)) {
-            Join join = field.getAnnotation(Join.class);
-            return root.join(join.value(), join.type()).get(fieldName);
+            Join[] joins = field.getAnnotationsByType(Join.class);
+            javax.persistence.criteria.Join<Object, Object> join = root.join(joins[0].value(), joins[0].type());
+            for (int i = 1; i < joins.length; i++) {
+                join = join.join(joins[i].value(), joins[i].type());
+            }
+            return join.get(fieldName);
         } else {
             return root.get(fieldName);
         }

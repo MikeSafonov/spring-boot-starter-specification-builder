@@ -1,10 +1,7 @@
 package com.github.mikesafonov.specification.builder.starter.annotations;
 
 import javax.persistence.criteria.JoinType;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Specifies a field for joining using join type {@link #type()}
@@ -13,6 +10,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
+@Repeatable(Joins.class)
 public @interface Join {
     String value();
 
