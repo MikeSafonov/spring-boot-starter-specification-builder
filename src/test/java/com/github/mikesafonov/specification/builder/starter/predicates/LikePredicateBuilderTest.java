@@ -35,6 +35,7 @@ class LikePredicateBuilderTest {
         builder.build(expression);
 
         verify(cb).like(expression, expectedValue);
+        verifyNoMoreInteractions(expression);
     }
 
     @ParameterizedTest
@@ -52,6 +53,7 @@ class LikePredicateBuilderTest {
         builder.build(expression);
 
         verify(cb).like(upperExpression, expectedValue.toUpperCase());
+        verifyNoMoreInteractions(expression);
     }
 
     private Like getLike(Like.DIRECTION direction, boolean caseSensitive) {

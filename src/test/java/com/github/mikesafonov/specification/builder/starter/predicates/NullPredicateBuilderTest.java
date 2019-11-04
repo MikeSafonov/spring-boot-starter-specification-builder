@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class NullPredicateBuilderTest {
     @Test
@@ -18,5 +17,6 @@ class NullPredicateBuilderTest {
         builder.build(expression);
 
         verify(cb).isNull(expression);
+        verifyNoMoreInteractions(expression);
     }
 }

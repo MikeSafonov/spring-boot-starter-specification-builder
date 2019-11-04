@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class EqualsPredicateBuilderTest {
     @Test
@@ -19,5 +18,6 @@ class EqualsPredicateBuilderTest {
         builder.build(expression);
 
         verify(cb).equal(expression, value);
+        verifyNoMoreInteractions(expression);
     }
 }

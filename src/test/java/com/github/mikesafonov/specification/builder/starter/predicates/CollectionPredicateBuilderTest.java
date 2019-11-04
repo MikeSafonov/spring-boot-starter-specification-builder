@@ -6,8 +6,7 @@ import javax.persistence.criteria.Expression;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class CollectionPredicateBuilderTest {
     @Test
@@ -23,5 +22,6 @@ class CollectionPredicateBuilderTest {
         Object[] objects = stringList.toArray(new Object[0]);
 
         verify(expression).in(objects);
+        verifyNoMoreInteractions(expression);
     }
 }
