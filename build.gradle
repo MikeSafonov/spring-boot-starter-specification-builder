@@ -8,7 +8,7 @@ apply plugin: "java-library"
 apply plugin: "maven"
 apply plugin: "signing"
 
-ext { springBootVersion = "2.1.9.RELEASE" }
+ext { springBootVersion = "2.2.0.RELEASE" }
 
 group "com.github.mikesafonov"
 version "1.0.0"
@@ -22,17 +22,6 @@ repositories {
 
 dependencyManagement {
     imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
-    dependencies {
-        dependencySet(group:"org.junit.jupiter", version: "5.5.2") {
-            entry "junit-jupiter-api"
-            entry "junit-jupiter-engine"
-            entry "junit-jupiter-params"
-        }
-        dependencySet(group:"org.junit.platform", version: "1.5.2") {
-            entry "junit-platform-engine"
-            entry "junit-platform-commons"
-        }
-    }
 }
 
 jar {
@@ -53,7 +42,6 @@ dependencies {
     annotationProcessor ("org.projectlombok:lombok:1.18.10")
 
     testImplementation ("org.springframework.boot:spring-boot-starter-test")
-    testImplementation ("org.junit.jupiter:junit-jupiter:5.5.2")
     testImplementation ("com.h2database:h2:1.4.197")
 }
 
