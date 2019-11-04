@@ -42,6 +42,7 @@ class Utils {
      * @param <F> filter class
      * @return
      */
+    @Nullable
     static <F> Object getFieldValue(@NonNull Field field, @NonNull F filter) {
         try {
             return FieldUtils.readField(field, filter, true);
@@ -56,6 +57,7 @@ class Utils {
      * @param filter
      * @return all <b>non synthetic</b> fields of the given class and its parents
      */
+    @NonNull
     static <F> List<Field> getFields(@NonNull F filter) {
         return Arrays.stream(FieldUtils.getAllFields(filter.getClass()))
                 .filter(field -> !field.isSynthetic())

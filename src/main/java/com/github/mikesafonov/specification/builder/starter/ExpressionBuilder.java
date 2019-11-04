@@ -2,6 +2,7 @@ package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Join;
 import lombok.experimental.UtilityClass;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
@@ -20,7 +21,8 @@ class ExpressionBuilder {
      * @param <E>           entity type
      * @return return attribute expression from root or joined attribute expression via {@link Join}
      */
-    static <E> Expression getExpression(Root<E> root, Field field, String attributeName) {
+    @NonNull
+    static <E> Expression getExpression(@NonNull Root<E> root, @NonNull Field field, @NonNull String attributeName) {
         if (field.isAnnotationPresent(Join.class)) {
             Join[] joins = field.getAnnotationsByType(Join.class);
             javax.persistence.criteria.Join<Object, Object> join = root.join(joins[0].value(), joins[0].type());

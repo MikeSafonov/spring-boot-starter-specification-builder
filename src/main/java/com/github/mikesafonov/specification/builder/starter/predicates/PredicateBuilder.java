@@ -1,5 +1,7 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 
@@ -16,5 +18,5 @@ public interface PredicateBuilder {
      * @param expression {@link Expression}
      * @return {@link Predicate}
      */
-    Predicate build(Expression expression);
+    @NonNull Predicate build(@NonNull Expression expression);
 }

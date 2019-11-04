@@ -17,7 +17,10 @@ import java.util.Collection;
 @UtilityClass
 public class PredicateBuilderFactory {
 
-    public static PredicateBuilder createPredicateBuilder(CriteriaBuilder cb, Field field, Object fieldValue) {
+    @org.springframework.lang.NonNull
+    public static PredicateBuilder createPredicateBuilder(@org.springframework.lang.NonNull CriteriaBuilder cb,
+                                                          @org.springframework.lang.NonNull Field field,
+                                                          @org.springframework.lang.NonNull Object fieldValue) {
         if (Collection.class.isAssignableFrom(fieldValue.getClass())) {
             Collection collection = (Collection) fieldValue;
             return new CollectionPredicateBuilder(collection);
@@ -28,8 +31,7 @@ public class PredicateBuilderFactory {
             return new NotNullPredicateBuilder(cb);
         } else if (field.isAnnotationPresent(IsNull.class)) {
             return new NullPredicateBuilder(cb);
-        } else {
-            return new EqualsPredicateBuilder(cb, fieldValue);
         }
+        return new EqualsPredicateBuilder(cb, fieldValue);
     }
 }

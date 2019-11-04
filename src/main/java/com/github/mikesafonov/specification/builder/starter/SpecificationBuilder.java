@@ -7,6 +7,8 @@ import com.github.mikesafonov.specification.builder.starter.predicates.Predicate
 import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilderFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
@@ -24,36 +26,43 @@ public class SpecificationBuilder {
 
     private static final String SERIAL_VERSION_UID_NAME = "serialVersionUID";
 
-    public <F, S> Specification<S> buildSpecification(F filter) {
+    public <F, S> Specification<S> buildSpecification(@NonNull F filter) {
         List<Field> fields = Utils.getFields(filter);
-        return (root, query, cb) -> cb.and(fields.stream()
-                .filter(this::isFieldSupported)
-                .map(field -> toPredicate(field, root, cb, filter))
-                .filter(Objects::nonNull)
-                .toArray(Predicate[]::new));
+        return (root, query, cb) -> {
+            Predicate[] predicates = fields.stream()
+                    .filter(this::isFieldSupported)
+                    .map(field -> toPredicate(field, root, cb, filter))
+                    .filter(Objects::nonNull)
+                    .toArray(Predicate[]::new);
+            return cb.and(predicates);
+        };
     }
 
-    private boolean isFieldSupported(Field field) {
+    private boolean isFieldSupported(@NonNull Field field) {
         return !(field.isAnnotationPresent(Ignore.class) || SERIAL_VERSION_UID_NAME.equals(field.getName()));
     }
 
-    private <F, S> Predicate toPredicate(Field field, Root<S> root, CriteriaBuilder cb, F filter) {
-        String fieldName = getFieldName(field);
+    @Nullable
+    private <F, S> Predicate toPredicate(@NonNull Field field, @NonNull Root<S> root, @NonNull CriteriaBuilder cb, @NonNull F filter) {
         Object fieldValue = Utils.getFieldValue(field, filter);
         if (Utils.isNotNullAndNotBlank(fieldValue)) {
+            String fieldName = getFieldName(field);
             return toPredicate(root, cb, field, fieldName, fieldValue);
         }
         return null;
     }
 
-    private String getFieldName(Field field) {
+    @NonNull
+    private String getFieldName(@NonNull Field field) {
         return field.isAnnotationPresent(Name.class)
                 ? field.getAnnotation(Name.class).value()
                 : field.getName();
     }
 
-    private <S> Predicate toPredicate(Root<S> root, CriteriaBuilder cb, Field field, String fieldName,
-                                      Object fieldValue) {
+    @NonNull
+    private <S> Predicate toPredicate(@NonNull Root<S> root, @NonNull CriteriaBuilder cb,
+                                      @NonNull Field field, @NonNull String fieldName,
+                                      @NonNull Object fieldValue) {
         Expression expression = ExpressionBuilder.getExpression(root, field, fieldName);
         PredicateBuilder predicateBuilder = PredicateBuilderFactory.createPredicateBuilder(cb, field, fieldValue);
         return predicateBuilder.build(expression);
