@@ -1,6 +1,6 @@
 # spring-boot-starter-specification-builder
 [![codecov](https://codecov.io/gh/MikeSafonov/spring-boot-starter-specification-builder/branch/master/graph/badge.svg)](https://codecov.io/gh/MikeSafonov/spring-boot-starter-specification-builder)
-![Travis-CI](https://travis-ci.com/MikeSafonov/spring-boot-starter-specification-builder.svg?branch=master)
+[![Travis-CI](https://travis-ci.com/MikeSafonov/spring-boot-starter-specification-builder.svg?branch=master)](https://travis-ci.com/MikeSafonov/spring-boot-starter-specification-builder)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MikeSafonov_spring-boot-starter-specification-builder&metric=alert_status)](https://sonarcloud.io/dashboard?id=MikeSafonov_spring-boot-starter-specification-builder)
