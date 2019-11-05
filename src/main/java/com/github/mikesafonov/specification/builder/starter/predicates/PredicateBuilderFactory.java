@@ -1,5 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
+import com.github.mikesafonov.specification.builder.starter.annotations.GreaterThan;
 import com.github.mikesafonov.specification.builder.starter.annotations.IsNull;
 import com.github.mikesafonov.specification.builder.starter.annotations.Like;
 import com.github.mikesafonov.specification.builder.starter.annotations.NonNull;
@@ -31,6 +32,8 @@ public class PredicateBuilderFactory {
             return new NotNullPredicateBuilder(cb);
         } else if (field.isAnnotationPresent(IsNull.class)) {
             return new NullPredicateBuilder(cb);
+        } else if (field.isAnnotationPresent(GreaterThan.class)) {
+            return new GreaterThanPredicateBuilder(cb, fieldValue);
         }
         return new EqualsPredicateBuilder(cb, fieldValue);
     }
