@@ -1,9 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
-import com.github.mikesafonov.specification.builder.starter.annotations.GreaterThan;
-import com.github.mikesafonov.specification.builder.starter.annotations.IsNull;
-import com.github.mikesafonov.specification.builder.starter.annotations.Like;
-import com.github.mikesafonov.specification.builder.starter.annotations.NonNull;
+import com.github.mikesafonov.specification.builder.starter.annotations.*;
 import lombok.experimental.UtilityClass;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -34,6 +31,8 @@ public class PredicateBuilderFactory {
             return new NullPredicateBuilder(cb);
         } else if (field.isAnnotationPresent(GreaterThan.class)) {
             return new GreaterThanPredicateBuilder(cb, fieldValue);
+        } else if (field.isAnnotationPresent(GreaterThanEqual.class)) {
+            return new GreaterThanEqualPredicateBuilder(cb, fieldValue);
         }
         return new EqualsPredicateBuilder(cb, fieldValue);
     }
