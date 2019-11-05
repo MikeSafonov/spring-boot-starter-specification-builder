@@ -33,6 +33,8 @@ public class PredicateBuilderFactory {
             return new GreaterThanPredicateBuilder(cb, fieldValue);
         } else if (field.isAnnotationPresent(GreaterThanEqual.class)) {
             return new GreaterThanEqualPredicateBuilder(cb, fieldValue);
+        } else if (field.isAnnotationPresent(LessThan.class)) {
+            return new LessThanPredicateBuilder(cb, fieldValue);
         }
         return new EqualsPredicateBuilder(cb, fieldValue);
     }
