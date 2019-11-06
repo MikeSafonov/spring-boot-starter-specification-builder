@@ -70,4 +70,13 @@ class SpecificationBuilderTest {
             assertThat(carModel.getName()).isNull();
         });
     }
+
+    @Test
+    void shouldFindByNonNull() {
+        NonNullCarModelFilter modelFilter = new NonNullCarModelFilter();
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(2, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> assertThat(carModel.getName()).isNotNull());
+        assertThat(data.get(1)).satisfies(carModel -> assertThat(carModel.getName()).isNotNull());
+    }
 }
