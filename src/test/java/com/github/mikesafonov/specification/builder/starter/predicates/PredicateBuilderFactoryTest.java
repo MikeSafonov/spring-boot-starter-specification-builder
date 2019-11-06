@@ -4,6 +4,7 @@ import com.github.mikesafonov.specification.builder.starter.base.CarFilter;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ class PredicateBuilderFactoryTest {
         Field field = CarFilter.class.getDeclaredField(fieldName);
         Object value = new ArrayList<>();
         Root root = mock(Root.class);
-        PredicateBuilder builder = PredicateBuilderFactory.createPredicateBuilder(root, cb, field, value, fieldName);
+        CriteriaQuery cq = mock(CriteriaQuery.class);
+        PredicateBuilder builder = new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
 
         assertThat(builder).isInstanceOf(CollectionPredicateBuilder.class);
     }
@@ -71,7 +73,8 @@ class PredicateBuilderFactoryTest {
         Root root = mock(Root.class);
 
         Field field = CarFilter.class.getDeclaredField(fieldName);
+        CriteriaQuery cq = mock(CriteriaQuery.class);
         Object value = "";
-        return PredicateBuilderFactory.createPredicateBuilder(root, cb, field, value, fieldName);
+        return new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
     }
 }

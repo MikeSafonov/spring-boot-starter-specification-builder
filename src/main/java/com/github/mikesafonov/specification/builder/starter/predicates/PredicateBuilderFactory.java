@@ -2,9 +2,9 @@ package com.github.mikesafonov.specification.builder.starter.predicates;
 
 import com.github.mikesafonov.specification.builder.starter.ExpressionBuilder;
 import com.github.mikesafonov.specification.builder.starter.annotations.*;
-import lombok.experimental.UtilityClass;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
@@ -15,13 +15,13 @@ import java.util.Collection;
  *
  * @author MikeSafonov
  */
-@UtilityClass
-public class PredicateBuilderFactory {
+public class PredicateBuilderFactory<T> {
 
     @org.springframework.lang.NonNull
-    public static PredicateBuilder createPredicateBuilder(
-            @org.springframework.lang.NonNull Root root,
+    public PredicateBuilder createPredicateBuilder(
+            @org.springframework.lang.NonNull Root<T> root,
             @org.springframework.lang.NonNull CriteriaBuilder cb,
+            @org.springframework.lang.NonNull CriteriaQuery<?> cq,
             @org.springframework.lang.NonNull Field field,
             @org.springframework.lang.NonNull Object fieldValue,
             @org.springframework.lang.NonNull String fieldName) {

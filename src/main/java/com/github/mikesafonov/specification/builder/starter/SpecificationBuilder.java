@@ -11,6 +11,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
@@ -25,12 +26,14 @@ public class SpecificationBuilder {
 
     private static final String SERIAL_VERSION_UID_NAME = "serialVersionUID";
 
+    private final PredicateBuilderFactory factory = new PredicateBuilderFactory();
+
     public <F, S> Specification<S> buildSpecification(@NonNull F filter) {
         List<Field> fields = Utils.getFields(filter);
         return (root, query, cb) -> {
             Predicate[] predicates = fields.stream()
                     .filter(this::isFieldSupported)
-                    .map(field -> toPredicate(field, root, cb, filter))
+                    .map(field -> toPredicate(field, root, cb, query, filter))
                     .filter(Objects::nonNull)
                     .toArray(Predicate[]::new);
             return cb.and(predicates);
@@ -42,12 +45,13 @@ public class SpecificationBuilder {
     }
 
     @Nullable
-    private <F, S> Predicate toPredicate(@NonNull Field field, @NonNull Root<S> root, @NonNull CriteriaBuilder cb, @NonNull F filter) {
+    private <F, S> Predicate toPredicate(@NonNull Field field, @NonNull Root<S> root, @NonNull CriteriaBuilder cb,
+                                         @NonNull CriteriaQuery<?> cq, @NonNull F filter) {
         Object fieldValue = Utils.getFieldValue(field, filter);
         if (Utils.isNotNullAndNotBlank(fieldValue) || field.isAnnotationPresent(IsNull.class)
                 || field.isAnnotationPresent(com.github.mikesafonov.specification.builder.starter.annotations.NonNull.class)) {
             String fieldName = getFieldName(field);
-            return toPredicate(root, cb, field, fieldName, fieldValue);
+            return toPredicate(root, cb, cq, field, fieldName, fieldValue);
         }
         return null;
     }
@@ -61,8 +65,8 @@ public class SpecificationBuilder {
 
     @NonNull
     private <S> Predicate toPredicate(@NonNull Root<S> root, @NonNull CriteriaBuilder cb,
-                                      @NonNull Field field, @NonNull String fieldName,
-                                      @NonNull Object fieldValue) {
-        return PredicateBuilderFactory.createPredicateBuilder(root, cb, field, fieldValue, fieldName).build();
+                                      @NonNull CriteriaQuery<?> cq, @NonNull Field field,
+                                      @NonNull String fieldName, @NonNull Object fieldValue) {
+        return factory.createPredicateBuilder(root, cb, cq, field, fieldValue, fieldName).build();
     }
 }
