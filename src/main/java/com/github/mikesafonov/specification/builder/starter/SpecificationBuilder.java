@@ -2,6 +2,7 @@ package com.github.mikesafonov.specification.builder.starter;
 
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Ignore;
+import com.github.mikesafonov.specification.builder.starter.annotations.IsNull;
 import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilder;
 import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilderFactory;
@@ -45,7 +46,8 @@ public class SpecificationBuilder {
     @Nullable
     private <F, S> Predicate toPredicate(@NonNull Field field, @NonNull Root<S> root, @NonNull CriteriaBuilder cb, @NonNull F filter) {
         Object fieldValue = Utils.getFieldValue(field, filter);
-        if (Utils.isNotNullAndNotBlank(fieldValue)) {
+        if (Utils.isNotNullAndNotBlank(fieldValue) || field.isAnnotationPresent(IsNull.class)
+                || field.isAnnotationPresent(com.github.mikesafonov.specification.builder.starter.annotations.NonNull.class)) {
             String fieldName = getFieldName(field);
             return toPredicate(root, cb, field, fieldName, fieldValue);
         }

@@ -19,16 +19,18 @@ public class PredicateBuilderFactory {
     public static PredicateBuilder createPredicateBuilder(@org.springframework.lang.NonNull CriteriaBuilder cb,
                                                           @org.springframework.lang.NonNull Field field,
                                                           @org.springframework.lang.NonNull Object fieldValue) {
+        if (field.isAnnotationPresent(IsNull.class)) {
+            return new NullPredicateBuilder(cb);
+        }
+        if(field.isAnnotationPresent(NonNull.class)){
+            return new NotNullPredicateBuilder(cb);
+        }
         if (Collection.class.isAssignableFrom(fieldValue.getClass())) {
             Collection collection = (Collection) fieldValue;
             return new CollectionPredicateBuilder(collection);
         }
         if (field.isAnnotationPresent(Like.class)) {
             return new LikePredicateBuilder(cb, field.getAnnotation(Like.class), fieldValue);
-        } else if (field.isAnnotationPresent(NonNull.class)) {
-            return new NotNullPredicateBuilder(cb);
-        } else if (field.isAnnotationPresent(IsNull.class)) {
-            return new NullPredicateBuilder(cb);
         } else if (field.isAnnotationPresent(GreaterThan.class)) {
             return new GreaterThanPredicateBuilder(cb, fieldValue);
         } else if (field.isAnnotationPresent(GreaterThanEqual.class)) {
