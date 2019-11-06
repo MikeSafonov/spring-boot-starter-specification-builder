@@ -138,7 +138,7 @@ In this example `SpecificationBuilder` create `equals` predicate only by `filter
 
 ### Get all entities with specific field `is not null`
 
-The following code example demonstrates how to find all entities with specific field is not null
+The following code example demonstrates how to find all entities with specific field is not null:
 
 Entity:
 ```java
@@ -164,7 +164,7 @@ public class CarFilter {
 
 ### Get all entities with specific field `is null`
 
-The following code example demonstrates how to find all entities with specific field is null
+The following code example demonstrates how to find all entities with specific field is null:
 
 Entity:
 ```java
@@ -190,7 +190,7 @@ public class CarFilter {
 
 ### Get all entities with specific field `greater than` filters value
 
-The following code example demonstrates how to find all entities with specific field is greater than filters value
+The following code example demonstrates how to find all entities with specific field is greater than filters value:
 
 Entity:
 ```java
@@ -216,7 +216,7 @@ public class CarFilter {
 
 ### Get all entities with specific field `greater than or equals` to filters value
 
-The following code example demonstrates how to find all entities with specific field is greater than or equals to filters value
+The following code example demonstrates how to find all entities with specific field is greater than or equals to filters value:
 
 Entity:
 ```java
@@ -242,7 +242,7 @@ public class CarFilter {
 
 ### Get all entities with specific field `less than` filters value
 
-The following code example demonstrates how to find all entities with specific field is less than filters value
+The following code example demonstrates how to find all entities with specific field is less than filters value:
 
 Entity:
 ```java
@@ -268,7 +268,7 @@ public class CarFilter {
 
 ### Get all entities with specific field `less than or equals` to filters value
 
-The following code example demonstrates how to find all entities with specific field is less than or equals to filters value
+The following code example demonstrates how to find all entities with specific field is less than or equals to filters value:
 
 Entity:
 ```java
@@ -289,6 +289,62 @@ public class CarFilter {
     @LessThanEqual
     @Name(value = "size")
     private Double filterSize;
+}
+```
+
+### `Like` predicate
+
+`Like` predicate works only with `String` values.
+
+The following code example demonstrates how to find all entities with specific field is `like` to filters value
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @Like
+    @Name(value = "size")
+    private String likeName;
+}
+```
+
+By default `@Like` ignores case. If you want to search by case sensitive values use `caseSensitive` property:
+
+```java
+public class CarFilter {
+    @Like(caseSensitive = true)
+    @Name(value = "size")
+    private String likeName;
+}
+```
+
+By default `@Like` search by `full` like (%value%). If you want to search by `left` like or `right` use `direction` property:
+
+```java
+public class CarFilter {
+    @Like(direction = Like.DIRECTION.LEFT)
+    @Name(value = "size")
+    private String likeName;
+}
+```
+
+```java
+public class CarFilter {
+    @Like(direction = Like.DIRECTION.RIGHT)
+    @Name(value = "size")
+    private String likeName;
 }
 ```
 
