@@ -129,4 +129,55 @@ class SpecificationBuilderTest {
             assertThat(carModel.getName()).isNotNull();
         });
     }
+
+    @Test
+    void shouldIgnoreField() {
+        IgnoreCarModelFilter modelFilter = new IgnoreCarModelFilter();
+        modelFilter.setId(1);
+        modelFilter.setName("volvo");
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(1);
+            assertThat(carModel.getName()).isNotNull();
+        });
+    }
+
+    @Test
+    void shouldFindByLeftLike() {
+        LikeCarModelFilter modelFilter = new LikeCarModelFilter();
+        modelFilter.setLeftName("lvo");
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(2);
+            assertThat(carModel.getName()).isEqualTo("volvo");
+        });
+    }
+
+
+    @Test
+    void shouldFindByRightLike() {
+        LikeCarModelFilter modelFilter = new LikeCarModelFilter();
+        modelFilter.setRightName("vol");
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(2);
+            assertThat(carModel.getName()).isEqualTo("volvo");
+        });
+    }
+
+
+    @Test
+    void shouldFindByAroundLike() {
+        LikeCarModelFilter modelFilter = new LikeCarModelFilter();
+        modelFilter.setAroundName("olv");
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(2);
+            assertThat(carModel.getName()).isEqualTo("volvo");
+        });
+    }
 }
