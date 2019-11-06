@@ -1,10 +1,10 @@
-package com.github.mikesafonov.specification.builder.starter.base;
+package com.github.mikesafonov.specification.builder.starter.base.studens;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "car_models")
-public class CarModel {
+@Table(name = "classes")
+public class ClassEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

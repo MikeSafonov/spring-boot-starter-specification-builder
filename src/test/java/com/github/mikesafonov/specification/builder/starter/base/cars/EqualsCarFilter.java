@@ -1,4 +1,4 @@
-package com.github.mikesafonov.specification.builder.starter.base;
+package com.github.mikesafonov.specification.builder.starter.base.cars;
 
 public class EqualsCarFilter {
     private Integer id;

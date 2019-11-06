@@ -1,8 +1,6 @@
-package com.github.mikesafonov.specification.builder.starter.base;
+package com.github.mikesafonov.specification.builder.starter.base.cars;
 
-import com.github.mikesafonov.specification.builder.starter.annotations.*;
-
-import java.util.Collection;
+import com.github.mikesafonov.specification.builder.starter.annotations.IsNull;
 
 public class IsNullCarModelFilter {
     @IsNull

@@ -1,13 +1,19 @@
 package com.github.mikesafonov.specification.builder.starter;
 
-import com.github.mikesafonov.specification.builder.starter.base.*;
+import com.github.mikesafonov.specification.builder.starter.base.cars.*;
+import com.github.mikesafonov.specification.builder.starter.base.studens.ClassEntity;
+import com.github.mikesafonov.specification.builder.starter.base.studens.StudentEntity;
+import com.github.mikesafonov.specification.builder.starter.base.studens.StudentFilter;
+import com.github.mikesafonov.specification.builder.starter.base.studens.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +26,8 @@ class SpecificationBuilderTest {
     private CarRepository carRepository;
     @Autowired
     private CarModelRepository carModelRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     private SpecificationBuilder specificationBuilder;
 
@@ -179,5 +187,27 @@ class SpecificationBuilderTest {
             assertThat(carModel.getId()).isEqualTo(2);
             assertThat(carModel.getName()).isEqualTo("volvo");
         });
+    }
+
+    @Test
+    void shouldFindManyToManyCollection() {
+        List<String> classes = new ArrayList<>();
+        classes.add("Class 3");
+        classes.add("Class 2");
+
+        StudentFilter studentFilter = new StudentFilter();
+        studentFilter.setClasses(classes);
+        List<StudentEntity> students = studentRepository.findAll(specificationBuilder.buildSpecification(studentFilter));
+
+        assertEquals(2, students.size());
+        assertThat(students.get(0)).satisfies(studentEntity -> {
+            assertThat(studentEntity.getId()).isEqualTo(4);
+            assertThat(studentEntity.getClassEntities().stream().map(ClassEntity::getName).collect(Collectors.toList())).containsAll(classes);
+        });
+        assertThat(students.get(1)).satisfies(studentEntity -> {
+            assertThat(studentEntity.getId()).isEqualTo(5);
+            assertThat(studentEntity.getClassEntities().stream().map(ClassEntity::getName).collect(Collectors.toList())).containsAll(classes);
+        });
+
     }
 }

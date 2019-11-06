@@ -1,14 +1,14 @@
-package com.github.mikesafonov.specification.builder.starter.base;
+package com.github.mikesafonov.specification.builder.starter.base.cars;
 
-import com.github.mikesafonov.specification.builder.starter.annotations.GreaterThan;
-import com.github.mikesafonov.specification.builder.starter.annotations.GreaterThanEqual;
+import com.github.mikesafonov.specification.builder.starter.annotations.LessThan;
+import com.github.mikesafonov.specification.builder.starter.annotations.LessThanEqual;
 import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 
-public class GreaterCarModelFilter {
-    @GreaterThan
+public class LessCarModelFilter {
+    @LessThan
     private Integer id;
 
-    @GreaterThanEqual
+    @LessThanEqual
     @Name("id")
     private Integer idEqual;
 

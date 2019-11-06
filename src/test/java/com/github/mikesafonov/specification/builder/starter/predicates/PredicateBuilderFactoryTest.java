@@ -1,6 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
-import com.github.mikesafonov.specification.builder.starter.base.CarFilter;
+import com.github.mikesafonov.specification.builder.starter.base.cars.CarFilter;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -26,6 +26,20 @@ class PredicateBuilderFactoryTest {
         PredicateBuilder builder = new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
 
         assertThat(builder).isInstanceOf(CollectionPredicateBuilder.class);
+    }
+
+    @Test
+    void shouldReturnManyToManyCollectionPredicateBuilder() throws NoSuchFieldException {
+        CriteriaBuilder cb = mock(CriteriaBuilder.class);
+
+        String fieldName = "manyToManyCollection";
+        Field field = CarFilter.class.getDeclaredField(fieldName);
+        Object value = new ArrayList<>();
+        Root root = mock(Root.class);
+        CriteriaQuery cq = mock(CriteriaQuery.class);
+        PredicateBuilder builder = new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
+
+        assertThat(builder).isInstanceOf(ManyToManyCollectionPredicateBuilder.class);
     }
 
     @Test
@@ -71,9 +85,9 @@ class PredicateBuilderFactoryTest {
     private PredicateBuilder createBuilderForField(String fieldName) throws NoSuchFieldException {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
         Root root = mock(Root.class);
+        CriteriaQuery cq = mock(CriteriaQuery.class);
 
         Field field = CarFilter.class.getDeclaredField(fieldName);
-        CriteriaQuery cq = mock(CriteriaQuery.class);
         Object value = "";
         return new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
     }

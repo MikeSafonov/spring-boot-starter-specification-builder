@@ -1,4 +1,4 @@
-package com.github.mikesafonov.specification.builder.starter.base;
+package com.github.mikesafonov.specification.builder.starter.base.cars;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.*;
 
@@ -23,6 +23,8 @@ public class CarFilter {
     @Name("number")
     private String nullValue;
     private Collection collection;
+    @ManyToManyCollection
+    private Collection manyToManyCollection;
 
     @GreaterThanEqual
     @Name("id")

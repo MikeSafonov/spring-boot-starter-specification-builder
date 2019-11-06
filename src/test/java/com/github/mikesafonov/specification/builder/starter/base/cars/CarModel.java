@@ -1,13 +1,15 @@
-package com.github.mikesafonov.specification.builder.starter.base;
+package com.github.mikesafonov.specification.builder.starter.base.cars;
 
-import com.github.mikesafonov.specification.builder.starter.annotations.Ignore;
-import com.github.mikesafonov.specification.builder.starter.annotations.Name;
+import javax.persistence.*;
 
-public class IgnoreCarModelFilter {
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Name("id")
-    @Ignore
+    @Column(name = "name")
     private String name;
 
     public Integer getId() {

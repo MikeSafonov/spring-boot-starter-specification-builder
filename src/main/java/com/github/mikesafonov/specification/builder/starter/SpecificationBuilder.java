@@ -10,10 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
@@ -45,8 +42,11 @@ public class SpecificationBuilder {
     }
 
     @Nullable
-    private <F, S> Predicate toPredicate(@NonNull Field field, @NonNull Root<S> root, @NonNull CriteriaBuilder cb,
-                                         @NonNull CriteriaQuery<?> cq, @NonNull F filter) {
+    private <F, S> Predicate toPredicate(@NonNull Field field,
+                                         @NonNull Root<S> root,
+                                         @NonNull CriteriaBuilder cb,
+                                         @NonNull CriteriaQuery<?> cq,
+                                         @NonNull F filter) {
         Object fieldValue = Utils.getFieldValue(field, filter);
         if (Utils.isNotNullAndNotBlank(fieldValue) || field.isAnnotationPresent(IsNull.class)
                 || field.isAnnotationPresent(com.github.mikesafonov.specification.builder.starter.annotations.NonNull.class)) {

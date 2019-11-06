@@ -1,8 +1,7 @@
-package com.github.mikesafonov.specification.builder.starter.base;
+package com.github.mikesafonov.specification.builder.starter.base.cars;
 
-import com.github.mikesafonov.specification.builder.starter.annotations.*;
-
-import java.util.Collection;
+import com.github.mikesafonov.specification.builder.starter.annotations.Join;
+import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 
 public class ModelCarFilter {
     @Name("number")
