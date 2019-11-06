@@ -32,6 +32,14 @@ public class CarFilter {
     @Name("id")
     private int idGreaterThan;
 
+    @LessThanEqual
+    @Name("id")
+    private int idLessThanEqual;
+
+    @LessThan
+    @Name("id")
+    private int idLessThan;
+
     public Integer getId() {
         return id;
     }
@@ -78,5 +86,21 @@ public class CarFilter {
 
     public void setIdGreaterThanEqual(int idGreaterThanEqual) {
         this.idGreaterThanEqual = idGreaterThanEqual;
+    }
+
+    public int getIdLessThan() {
+        return idLessThan;
+    }
+
+    public void setIdLessThan(int idLessThan) {
+        this.idLessThan = idLessThan;
+    }
+
+    public int getIdLessThanEqual() {
+        return idLessThanEqual;
+    }
+
+    public void setIdLessThanEqual(int idLessThanEqual) {
+        this.idLessThanEqual = idLessThanEqual;
     }
 }

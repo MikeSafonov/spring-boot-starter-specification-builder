@@ -66,4 +66,48 @@ class PredicateBuilderFactoryTest {
 
         assertThat(builder).isInstanceOf(EqualsPredicateBuilder.class);
     }
+
+    @Test
+    void shouldReturnGreaterThanEqualsPredicateBuilder() throws NoSuchFieldException {
+        CriteriaBuilder cb = mock(CriteriaBuilder.class);
+
+        Field field = CarFilter.class.getDeclaredField("idGreaterThanEqual");
+        Object value = "";
+        PredicateBuilder builder = PredicateBuilderFactory.createPredicateBuilder(cb, field, value);
+
+        assertThat(builder).isInstanceOf(GreaterThanEqualPredicateBuilder.class);
+    }
+
+    @Test
+    void shouldReturnGreaterThanPredicateBuilder() throws NoSuchFieldException {
+        CriteriaBuilder cb = mock(CriteriaBuilder.class);
+
+        Field field = CarFilter.class.getDeclaredField("idGreaterThan");
+        Object value = "";
+        PredicateBuilder builder = PredicateBuilderFactory.createPredicateBuilder(cb, field, value);
+
+        assertThat(builder).isInstanceOf(GreaterThanPredicateBuilder.class);
+    }
+
+    @Test
+    void shouldReturnLessThanEqualsPredicateBuilder() throws NoSuchFieldException {
+        CriteriaBuilder cb = mock(CriteriaBuilder.class);
+
+        Field field = CarFilter.class.getDeclaredField("idLessThanEqual");
+        Object value = "";
+        PredicateBuilder builder = PredicateBuilderFactory.createPredicateBuilder(cb, field, value);
+
+        assertThat(builder).isInstanceOf(LessThanEqualPredicateBuilder.class);
+    }
+
+    @Test
+    void shouldReturnLessThanPredicateBuilder() throws NoSuchFieldException {
+        CriteriaBuilder cb = mock(CriteriaBuilder.class);
+
+        Field field = CarFilter.class.getDeclaredField("idLessThan");
+        Object value = "";
+        PredicateBuilder builder = PredicateBuilderFactory.createPredicateBuilder(cb, field, value);
+
+        assertThat(builder).isInstanceOf(LessThanPredicateBuilder.class);
+    }
 }
