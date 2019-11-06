@@ -18,6 +18,280 @@
 
 This is a spring Boot starter for building specifications in declarative way.
 
+## Usage
+
+Only one bean ([SpecificationBuilder](https://github.com/MikeSafonov/spring-boot-starter-specification-builder/blob/master/src/main/java/com/github/mikesafonov/specification/builder/starter/SpecificationBuilder.java)) is created automatically by this starter.
+
+In all of the examples below, it is assumed that we have the following classes:
+
+Entity:
+```java
+@Entity
+@Table(name = "my_entity")
+public class MyEntity {
+    ...
+}
+```
+
+Filter:
+```java
+public class MyEntityFilter {
+    ...
+}
+```
+
+Repository:
+```java
+public interface MyEntityRepository extends JpaRepository<MyEntity, Integer>, JpaSpecificationExecutor<MyEntity> {
+}
+```
+
+Service which uses MyEntityRepository and `SpecificationBuilder` 
+
+```java
+public class MyEntityService {
+    ...
+    public List<MyEntity> findByFilter(MyEntityFilter filter){
+        return myEntityRepository.findAll(specificationBuilder.buildSpecification(filter));
+    }   
+}
+```
+
+### Get all entities with specific field `is equals` to filters value
+
+The following code example demonstrates how to find all entities by filter`s value:
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    private String name;
+}
+```
+
+If there is no annotation on the filters field then `SpecificationBuilder` create `equals` predicate.
+
+### Different `name` of column in filter
+
+The following code example demonstrates how to link filters field with entity`s field:  
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @Name(value = "name")
+    private String filterByName;
+}
+```
+
+### Ignore specific field in filter
+
+The following code example demonstrates how to ignore specific field in filter:
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @Ignore
+    private String name;
+    @Name(value = "name")
+    private String filterByName;
+}
+```
+In this example `SpecificationBuilder` create `equals` predicate only by `filterByName` field.
+
+### Get all entities with specific field `is not null`
+
+The following code example demonstrates how to find all entities with specific field is not null
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @NonNull
+    @Name(value = "name")
+    private String filterByName;
+}
+```
+
+### Get all entities with specific field `is null`
+
+The following code example demonstrates how to find all entities with specific field is null
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @IsNull
+    @Name(value = "name")
+    private String filterByName;
+}
+```
+
+### Get all entities with specific field `greater than` filters value
+
+The following code example demonstrates how to find all entities with specific field is greater than filters value
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "size")
+    private Double size;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @GreaterThan
+    @Name(value = "size")
+    private Double filterSize;
+}
+```
+
+### Get all entities with specific field `greater than or equals` to filters value
+
+The following code example demonstrates how to find all entities with specific field is greater than or equals to filters value
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "size")
+    private Double size;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @GreaterThanEqual
+    @Name(value = "size")
+    private Double filterSize;
+}
+```
+
+### Get all entities with specific field `less than` filters value
+
+The following code example demonstrates how to find all entities with specific field is less than filters value
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "size")
+    private Double size;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @LessThan
+    @Name(value = "size")
+    private Double filterSize;
+}
+```
+
+### Get all entities with specific field `less than or equals` to filters value
+
+The following code example demonstrates how to find all entities with specific field is less than or equals to filters value
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "size")
+    private Double size;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @LessThanEqual
+    @Name(value = "size")
+    private Double filterSize;
+}
+```
+
 ## Build
 
 ### Build from source
