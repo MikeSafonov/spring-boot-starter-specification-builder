@@ -79,4 +79,54 @@ class SpecificationBuilderTest {
         assertThat(data.get(0)).satisfies(carModel -> assertThat(carModel.getName()).isNotNull());
         assertThat(data.get(1)).satisfies(carModel -> assertThat(carModel.getName()).isNotNull());
     }
+
+    @Test
+    void shouldFindByGreaterThan() {
+        GreaterCarModelFilter modelFilter = new GreaterCarModelFilter();
+        modelFilter.setId(2);
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(3);
+            assertThat(carModel.getName()).isNull();
+        });
+    }
+
+
+    @Test
+    void shouldFindByGreaterThanEqual() {
+        GreaterCarModelFilter modelFilter = new GreaterCarModelFilter();
+        modelFilter.setIdEqual(3);
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(3);
+            assertThat(carModel.getName()).isNull();
+        });
+    }
+
+    @Test
+    void shouldFindByLessThan() {
+        LessCarModelFilter modelFilter = new LessCarModelFilter();
+        modelFilter.setId(2);
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(1);
+            assertThat(carModel.getName()).isNotNull();
+        });
+    }
+
+
+    @Test
+    void shouldFindByLessThanEqual() {
+        LessCarModelFilter modelFilter = new LessCarModelFilter();
+        modelFilter.setIdEqual(1);
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(1);
+            assertThat(carModel.getName()).isNotNull();
+        });
+    }
 }
