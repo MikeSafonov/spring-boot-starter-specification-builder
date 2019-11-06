@@ -14,9 +14,10 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class CollectionPredicateBuilder implements PredicateBuilder {
     private final Collection fieldValue;
+    private final Expression expression;
 
     @Override
-    public Predicate build(Expression expression) {
+    public Predicate build() {
         return expression.in(fieldValue);
     }
 }

@@ -4,7 +4,6 @@ package com.github.mikesafonov.specification.builder.starter;
 import com.github.mikesafonov.specification.builder.starter.annotations.Ignore;
 import com.github.mikesafonov.specification.builder.starter.annotations.IsNull;
 import com.github.mikesafonov.specification.builder.starter.annotations.Name;
-import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilder;
 import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilderFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
@@ -12,7 +11,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
@@ -65,8 +63,6 @@ public class SpecificationBuilder {
     private <S> Predicate toPredicate(@NonNull Root<S> root, @NonNull CriteriaBuilder cb,
                                       @NonNull Field field, @NonNull String fieldName,
                                       @NonNull Object fieldValue) {
-        Expression expression = ExpressionBuilder.getExpression(root, field, fieldName);
-        PredicateBuilder predicateBuilder = PredicateBuilderFactory.createPredicateBuilder(cb, field, fieldValue);
-        return predicateBuilder.build(expression);
+        return PredicateBuilderFactory.createPredicateBuilder(root, cb, field, fieldValue, fieldName).build();
     }
 }

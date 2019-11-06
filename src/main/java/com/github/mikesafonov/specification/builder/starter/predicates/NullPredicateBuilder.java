@@ -14,9 +14,10 @@ import javax.persistence.criteria.Predicate;
 @RequiredArgsConstructor
 public class NullPredicateBuilder implements PredicateBuilder {
     private final CriteriaBuilder cb;
+    private final Expression expression;
 
     @Override
-    public Predicate build(Expression expression) {
+    public Predicate build() {
         return cb.isNull(expression);
     }
 }

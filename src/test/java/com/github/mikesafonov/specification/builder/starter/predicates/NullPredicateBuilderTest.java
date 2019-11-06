@@ -12,9 +12,9 @@ class NullPredicateBuilderTest {
     void shouldCallIsNull(){
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
         Expression expression = mock(Expression.class);
-        NullPredicateBuilder builder = new NullPredicateBuilder(cb);
+        NullPredicateBuilder builder = new NullPredicateBuilder(cb, expression);
 
-        builder.build(expression);
+        builder.build();
 
         verify(cb).isNull(expression);
         verifyNoMoreInteractions(expression);

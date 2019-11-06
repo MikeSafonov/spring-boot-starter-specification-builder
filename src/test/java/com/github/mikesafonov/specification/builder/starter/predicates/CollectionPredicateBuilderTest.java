@@ -13,11 +13,11 @@ class CollectionPredicateBuilderTest {
     void shouldCallInOnExpression() {
         List<String> stringList = new ArrayList<>();
         stringList.add("Some string");
-        CollectionPredicateBuilder builder = new CollectionPredicateBuilder(stringList);
-
         Expression expression = mock(Expression.class);
+        CollectionPredicateBuilder builder = new CollectionPredicateBuilder(stringList, expression);
 
-        builder.build(expression);
+
+        builder.build();
 
         verify(expression).in(stringList);
         verifyNoMoreInteractions(expression);

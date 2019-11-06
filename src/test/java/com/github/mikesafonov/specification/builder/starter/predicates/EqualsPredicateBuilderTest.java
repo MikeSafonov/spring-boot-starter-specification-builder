@@ -13,9 +13,9 @@ class EqualsPredicateBuilderTest {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
         Object value = "Some value";
         Expression expression = mock(Expression.class);
-        EqualsPredicateBuilder builder = new EqualsPredicateBuilder(cb, value);
+        EqualsPredicateBuilder builder = new EqualsPredicateBuilder(cb, value, expression);
 
-        builder.build(expression);
+        builder.build();
 
         verify(cb).equal(expression, value);
         verifyNoMoreInteractions(expression);

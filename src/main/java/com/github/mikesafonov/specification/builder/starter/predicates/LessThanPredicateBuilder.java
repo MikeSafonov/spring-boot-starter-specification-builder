@@ -11,9 +11,10 @@ public class LessThanPredicateBuilder implements PredicateBuilder {
 
     private final CriteriaBuilder cb;
     private final Object fieldValue;
+    private final Expression expression;
 
     @Override
-    public Predicate build(Expression expression) {
+    public Predicate build() {
         return cb.lessThan(expression, (Comparable) fieldValue);
     }
 }

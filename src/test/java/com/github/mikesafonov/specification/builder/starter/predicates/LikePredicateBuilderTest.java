@@ -30,9 +30,9 @@ class LikePredicateBuilderTest {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
         Expression expression = mock(Expression.class);
         Like like = getLike(direction, true);
-        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, value);
+        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, value, expression);
 
-        builder.build(expression);
+        builder.build();
 
         verify(cb).like(expression, expectedValue);
         verifyNoMoreInteractions(expression);
@@ -46,11 +46,11 @@ class LikePredicateBuilderTest {
         Expression upperExpression = mock(Expression.class);
 
         Like like = getLike(direction, false);
-        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, value);
+        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, value, expression);
 
         when(cb.upper(expression)).thenReturn(upperExpression);
 
-        builder.build(expression);
+        builder.build();
 
         verify(cb).like(upperExpression, expectedValue.toUpperCase());
         verifyNoMoreInteractions(expression);

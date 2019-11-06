@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
  * @author MikeSafonov
  */
 @UtilityClass
-class ExpressionBuilder {
+public class ExpressionBuilder {
 
     /**
      * @param root          entity root
@@ -22,7 +22,7 @@ class ExpressionBuilder {
      * @return return attribute expression from root or joined attribute expression via {@link Join}
      */
     @NonNull
-    static <E> Expression getExpression(@NonNull Root<E> root, @NonNull Field field, @NonNull String attributeName) {
+    public  static <E> Expression getExpression(@NonNull Root<E> root, @NonNull Field field, @NonNull String attributeName) {
         if (field.isAnnotationPresent(Join.class)) {
             Join[] joins = field.getAnnotationsByType(Join.class);
             javax.persistence.criteria.Join<Object, Object> join = root.join(joins[0].value(), joins[0].type());

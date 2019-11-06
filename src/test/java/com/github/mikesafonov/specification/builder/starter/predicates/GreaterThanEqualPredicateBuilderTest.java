@@ -13,9 +13,9 @@ class GreaterThanEqualPredicateBuilderTest {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
         String value = "Some value";
         Expression expression = mock(Expression.class);
-        GreaterThanEqualPredicateBuilder builder = new GreaterThanEqualPredicateBuilder(cb, value);
+        GreaterThanEqualPredicateBuilder builder = new GreaterThanEqualPredicateBuilder(cb, value,expression);
 
-        builder.build(expression);
+        builder.build();
 
         verify(cb).greaterThanOrEqualTo(expression, value);
         verifyNoMoreInteractions(expression);

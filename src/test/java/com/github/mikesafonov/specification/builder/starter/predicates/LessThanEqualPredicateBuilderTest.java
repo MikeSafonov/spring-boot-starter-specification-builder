@@ -13,9 +13,9 @@ class LessThanEqualPredicateBuilderTest {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
         String value = "Some value";
         Expression expression = mock(Expression.class);
-        LessThanEqualPredicateBuilder builder = new LessThanEqualPredicateBuilder(cb, value);
+        LessThanEqualPredicateBuilder builder = new LessThanEqualPredicateBuilder(cb, value, expression);
 
-        builder.build(expression);
+        builder.build();
 
         verify(cb).lessThanOrEqualTo(expression, value);
         verifyNoMoreInteractions(expression);
