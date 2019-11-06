@@ -19,9 +19,7 @@ class CollectionPredicateBuilderTest {
 
         builder.build(expression);
 
-        Object[] objects = stringList.toArray(new Object[0]);
-
-        verify(expression).in(objects);
+        verify(expression).in(stringList);
         verifyNoMoreInteractions(expression);
     }
 }

@@ -17,7 +17,6 @@ public class CollectionPredicateBuilder implements PredicateBuilder {
 
     @Override
     public Predicate build(Expression expression) {
-        Object[] objects = fieldValue.toArray(new Object[0]);
-        return expression.in(objects);
+        return expression.in(fieldValue);
     }
 }
