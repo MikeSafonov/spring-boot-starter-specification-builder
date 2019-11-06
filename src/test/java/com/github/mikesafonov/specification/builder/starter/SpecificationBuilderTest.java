@@ -1,8 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter;
 
-import com.github.mikesafonov.specification.builder.starter.base.CarEntity;
-import com.github.mikesafonov.specification.builder.starter.base.CarFilter;
-import com.github.mikesafonov.specification.builder.starter.base.CarRepository;
+import com.github.mikesafonov.specification.builder.starter.base.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,8 @@ class SpecificationBuilderTest {
 
     @Autowired
     private CarRepository carRepository;
+    @Autowired
+    private CarModelRepository carModelRepository;
 
     private SpecificationBuilder specificationBuilder;
 
@@ -58,6 +58,16 @@ class SpecificationBuilderTest {
                 assertThat(carModel.getName()).isEqualTo("volvo");
             });
         });
+    }
 
+    @Test
+    void shouldFindByIsNull() {
+        IsNullCarModelFilter modelFilter = new IsNullCarModelFilter();
+        List<CarModel> data = carModelRepository.findAll(specificationBuilder.buildSpecification(modelFilter));
+        assertEquals(1, data.size());
+        assertThat(data.get(0)).satisfies(carModel -> {
+            assertThat(carModel.getId()).isEqualTo(3);
+            assertThat(carModel.getName()).isNull();
+        });
     }
 }

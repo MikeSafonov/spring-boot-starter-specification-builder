@@ -3,7 +3,8 @@ DELETE FROM car_models;
 
 insert into car_models(id, name)
 values (1, 'audi'),
-       (2, 'volvo');
+       (2, 'volvo'),
+       (3, null);
 
 insert into cars(id, number, id_model)
 values (1, '123', 1),
