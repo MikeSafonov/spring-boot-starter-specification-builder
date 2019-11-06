@@ -7,6 +7,10 @@ import javax.persistence.criteria.Expression;
 
 import static org.mockito.Mockito.*;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 class EqualsPredicateBuilderTest {
     @Test
     void shouldCallEqualsOnExpression(){

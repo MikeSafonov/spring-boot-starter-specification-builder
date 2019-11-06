@@ -2,6 +2,10 @@ package com.github.mikesafonov.specification.builder.starter.base.studens;
 
 import javax.persistence.*;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 @Entity
 @Table(name = "classes")
 public class ClassEntity {

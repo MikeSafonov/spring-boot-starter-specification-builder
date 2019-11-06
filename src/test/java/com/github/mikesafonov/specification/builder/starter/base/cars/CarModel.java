@@ -2,6 +2,10 @@ package com.github.mikesafonov.specification.builder.starter.base.cars;
 
 import javax.persistence.*;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 @Entity
 @Table(name = "car_models")
 public class CarModel {

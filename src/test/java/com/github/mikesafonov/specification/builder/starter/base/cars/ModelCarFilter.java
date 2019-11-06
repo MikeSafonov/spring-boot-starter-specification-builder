@@ -3,6 +3,10 @@ package com.github.mikesafonov.specification.builder.starter.base.cars;
 import com.github.mikesafonov.specification.builder.starter.annotations.Join;
 import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 public class ModelCarFilter {
     @Name("number")
     private String car;

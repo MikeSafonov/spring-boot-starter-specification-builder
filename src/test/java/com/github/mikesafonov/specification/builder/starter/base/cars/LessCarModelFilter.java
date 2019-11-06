@@ -4,6 +4,10 @@ import com.github.mikesafonov.specification.builder.starter.annotations.LessThan
 import com.github.mikesafonov.specification.builder.starter.annotations.LessThanEqual;
 import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 public class LessCarModelFilter {
     @LessThan
     private Integer id;

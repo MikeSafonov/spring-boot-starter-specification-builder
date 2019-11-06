@@ -8,6 +8,10 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 class CollectionPredicateBuilderTest {
     @Test
     void shouldCallInOnExpression() {

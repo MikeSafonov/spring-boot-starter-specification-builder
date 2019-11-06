@@ -3,6 +3,10 @@ package com.github.mikesafonov.specification.builder.starter.base.studens;
 import javax.persistence.*;
 import java.util.Set;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 @Entity
 @Table(name = "students")
 public class StudentEntity {

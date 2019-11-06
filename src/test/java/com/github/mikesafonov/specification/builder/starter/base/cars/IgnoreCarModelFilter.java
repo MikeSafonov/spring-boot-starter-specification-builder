@@ -3,6 +3,10 @@ package com.github.mikesafonov.specification.builder.starter.base.cars;
 import com.github.mikesafonov.specification.builder.starter.annotations.Ignore;
 import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 public class IgnoreCarModelFilter {
     private Integer id;
 

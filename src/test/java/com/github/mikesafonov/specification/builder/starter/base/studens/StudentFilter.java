@@ -6,6 +6,10 @@ import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 
 import java.util.List;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 public class StudentFilter {
     @ManyToManyCollection
     @Join(value = "classEntities")

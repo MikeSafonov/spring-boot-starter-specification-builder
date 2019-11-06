@@ -18,6 +18,10 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 @DataJpaTest
 @Sql("/init.sql")
 class SpecificationBuilderTest {

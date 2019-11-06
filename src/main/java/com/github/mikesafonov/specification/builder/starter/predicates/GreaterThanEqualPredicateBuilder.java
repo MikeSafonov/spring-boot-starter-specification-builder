@@ -6,6 +6,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 @RequiredArgsConstructor
 public class GreaterThanEqualPredicateBuilder implements PredicateBuilder {
     private final CriteriaBuilder cb;

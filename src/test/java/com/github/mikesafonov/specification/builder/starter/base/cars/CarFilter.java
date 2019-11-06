@@ -4,6 +4,10 @@ import com.github.mikesafonov.specification.builder.starter.annotations.*;
 
 import java.util.Collection;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 public class CarFilter {
     private Integer id;
     @Name("number")

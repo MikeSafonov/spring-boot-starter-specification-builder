@@ -4,6 +4,10 @@ import com.github.mikesafonov.specification.builder.starter.annotations.GreaterT
 import com.github.mikesafonov.specification.builder.starter.annotations.GreaterThanEqual;
 import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 public class GreaterCarModelFilter {
     @GreaterThan
     private Integer id;

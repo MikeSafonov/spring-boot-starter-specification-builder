@@ -14,6 +14,10 @@ import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
 
+/**
+ *
+ * @author MikeSafonov
+ */
 class LikePredicateBuilderTest {
 
     private static Stream<Arguments> directionArguments() {
