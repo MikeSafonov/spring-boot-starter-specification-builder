@@ -17,11 +17,20 @@ public class CarFilter {
     private String likeValue;
 
     @NonNull
+    @Name("number")
     private String nonNullValue;
     @IsNull
+    @Name("number")
     private String nullValue;
-    @IsNull
     private Collection collection;
+
+    @GreaterThanEqual
+    @Name("id")
+    private int idGreaterThanEqual;
+
+    @GreaterThan
+    @Name("id")
+    private int idGreaterThan;
 
     public Integer getId() {
         return id;
@@ -53,5 +62,21 @@ public class CarFilter {
 
     public void setModel(String model) {
         this.model = model;
+    }
+
+    public int getIdGreaterThan() {
+        return idGreaterThan;
+    }
+
+    public void setIdGreaterThan(int idGreaterThan) {
+        this.idGreaterThan = idGreaterThan;
+    }
+
+    public int getIdGreaterThanEqual() {
+        return idGreaterThanEqual;
+    }
+
+    public void setIdGreaterThanEqual(int idGreaterThanEqual) {
+        this.idGreaterThanEqual = idGreaterThanEqual;
     }
 }

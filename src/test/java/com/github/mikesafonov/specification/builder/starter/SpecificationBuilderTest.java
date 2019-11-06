@@ -30,7 +30,7 @@ class SpecificationBuilderTest {
 
     @Test
     void shouldFindById() {
-        CarFilter carFilter = new CarFilter();
+        EqualsCarFilter carFilter = new EqualsCarFilter();
         carFilter.setId(1);
         List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(carFilter));
         assertEquals(1, data.size());
@@ -46,7 +46,7 @@ class SpecificationBuilderTest {
 
     @Test
     void shouldFindByJoin() {
-        CarFilter carFilter = new CarFilter();
+        ModelCarFilter carFilter = new ModelCarFilter();
         carFilter.setModel("volvo");
         List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(carFilter));
         assertEquals(1, data.size());
