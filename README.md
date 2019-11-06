@@ -348,6 +348,54 @@ public class CarFilter {
 }
 ```
 
+### Using `Join`
+
+The following code example demonstrates how to find all entities with specific field is `equal` to filters value, joined by another field 
+
+Entities:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+    @ManyToOne
+    @JoinColumn(name = "id_model")
+    private CarModel model;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @Join(value = "model")
+    @Name(value = "name")
+    private String model;
+
+    @Join(value = "model")
+    @Name(value = "id")
+    @GreaterThan
+    private Integer modelId;
+}
+```
+
+`Join` is `Repeatable` annotation so you can join multiple entities.
+
 ## Build
 
 ### Build from source
