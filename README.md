@@ -188,22 +188,9 @@ public class CarFilter {
 }
 ```
 
-### Get all entities with specific field `greater than` filters value
+### Get all entities with specific field `greater than`/`greater than or equals`/`less than`/`less than or equals` filters value
 
-The following code example demonstrates how to find all entities with specific field is greater than filters value:
-
-Entity:
-```java
-@Entity
-@Table(name = "car_models")
-public class CarModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "size")
-    private Double size;
-}
-```
+The following code example demonstrates how to use `@GreaterThan`, `@GreaterThanEqual`, `@LessThan` and `@LessThanEqual` annotations:
 
 Filter:
 ```java
@@ -211,84 +198,15 @@ public class CarFilter {
     @GreaterThan
     @Name(value = "size")
     private Double filterSize;
-}
-```
-
-### Get all entities with specific field `greater than or equals` to filters value
-
-The following code example demonstrates how to find all entities with specific field is greater than or equals to filters value:
-
-Entity:
-```java
-@Entity
-@Table(name = "car_models")
-public class CarModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "size")
-    private Double size;
-}
-```
-
-Filter:
-```java
-public class CarFilter {
     @GreaterThanEqual
-    @Name(value = "size")
-    private Double filterSize;
-}
-```
-
-### Get all entities with specific field `less than` filters value
-
-The following code example demonstrates how to find all entities with specific field is less than filters value:
-
-Entity:
-```java
-@Entity
-@Table(name = "car_models")
-public class CarModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "size")
-    private Double size;
-}
-```
-
-Filter:
-```java
-public class CarFilter {
+    @Name(value = "size2")
+    private Double filterSize2;
     @LessThan
-    @Name(value = "size")
-    private Double filterSize;
-}
-```
-
-### Get all entities with specific field `less than or equals` to filters value
-
-The following code example demonstrates how to find all entities with specific field is less than or equals to filters value:
-
-Entity:
-```java
-@Entity
-@Table(name = "car_models")
-public class CarModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(name = "size")
-    private Double size;
-}
-```
-
-Filter:
-```java
-public class CarFilter {
+    @Name(value = "size3")
+    private Double filterSize3;
     @LessThanEqual
-    @Name(value = "size")
-    private Double filterSize;
+    @Name(value = "size4")
+    private Double filterSize4;
 }
 ```
 
@@ -367,8 +285,8 @@ public class CarModel {
 
 ```java
 @Entity
-@Table(name = "car_models")
-public class CarModel {
+@Table(name = "cars")
+public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
