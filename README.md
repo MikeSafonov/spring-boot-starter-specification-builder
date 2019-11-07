@@ -314,6 +314,75 @@ public class CarFilter {
 
 `Join` is `Repeatable` annotation so you can join multiple entities.
 
+### Collections in filter
+
+The following code example demonstrates how to find all entities with specific field `contains in` filters value:
+
+Entity:
+ ```java
+ @Entity
+ @Table(name = "car_models")
+ public class CarModel {
+     @Id
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Integer id;
+     @Column(name = "name")
+     private String name;
+ }
+ ```
+ 
+Filter:
+ ```java
+ public class CarFilter {
+     @Name(value = "name")
+     private Collection<String> names;
+ }
+ ```
+
+### Filter by `many-to-many` linked tables
+
+The following code example demonstrates how to find all entities with specific many-to-many joined field `contains in` filters value:
+
+Entity:
+```java
+@Entity
+@Table(name = "students")
+public class StudentEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "students_classes",
+            joinColumns = @JoinColumn(name = "id_student"),
+            inverseJoinColumns = @JoinColumn(name = "id_class"))
+    private Set<ClassEntity> classEntities;
+}
+```  
+```java
+@Entity
+@Table(name = "classes")
+public class ClassEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+
+```java
+public class StudentFilter {
+    @ManyToManyCollection
+    @Join(value = "classEntities")
+    @Name(value = "name")
+    private List<String> classes;
+}
+```
+
 ## Build
 
 ### Build from source
