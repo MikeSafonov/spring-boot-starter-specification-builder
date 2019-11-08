@@ -1,4 +1,5 @@
 # spring-boot-starter-specification-builder
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.mikesafonov/spring-boot-starter-specification-builder.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.mikesafonov%22%20AND%20a:%22spring-boot-starter-specification-builder%22)
 [![codecov](https://codecov.io/gh/MikeSafonov/spring-boot-starter-specification-builder/branch/master/graph/badge.svg)](https://codecov.io/gh/MikeSafonov/spring-boot-starter-specification-builder)
 [![Travis-CI](https://travis-ci.com/MikeSafonov/spring-boot-starter-specification-builder.svg?branch=master)](https://travis-ci.com/MikeSafonov/spring-boot-starter-specification-builder)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
@@ -17,6 +18,22 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=MikeSafonov_spring-boot-starter-specification-builder&metric=sqale_index)](https://sonarcloud.io/dashboard?id=MikeSafonov_spring-boot-starter-specification-builder)
 
 This is a spring Boot starter for building specifications in declarative way.
+
+The starter is available at `maven central` repository.
+
+Using `gradle`: 
+    
+    dependencies {
+        implementation 'com.github.mikesafonov:spring-boot-starter-specification-builder:1.0.0'
+    }
+
+Using `maven`:
+
+    <dependency>
+      <groupId>com.github.mikesafonov</groupId>
+      <artifactId>spring-boot-starter-specification-builder</artifactId>
+      <version>1.0.0</version>
+    </dependency>
 
 ## Usage
 
