@@ -8,7 +8,7 @@ apply plugin: "java-library"
 apply plugin: "maven"
 apply plugin: "signing"
 
-ext { springBootVersion = "2.2.2.RELEASE" }
+ext { springBootVersion = "2.2.5.RELEASE" }
 
 group "com.github.mikesafonov"
 version "1.0.0"
