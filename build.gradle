@@ -17,7 +17,7 @@ apply plugin: "maven"
 apply plugin: "signing"
 apply plugin: "info.solidsoft.pitest"
 
-ext { springBootVersion = "2.2.5.RELEASE" }
+ext { springBootVersion = "2.2.6.RELEASE" }
 
 group "com.github.mikesafonov"
 version "1.1.0"
