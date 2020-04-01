@@ -1,6 +1,7 @@
 package com.github.mikesafonov.specification.builder.starter.base.cars;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.*;
+import com.github.mikesafonov.specification.builder.starter.type.SegmentFilter;
 
 import java.util.Collection;
 
@@ -45,6 +46,9 @@ public class CarFilter {
     @LessThan
     @Name("id")
     private int idLessThan;
+
+    @SegmentIntersection(fromField = "costFrom", toField = "costTo")
+    private SegmentFilter<Integer> costFilter;
 
     public Integer getId() {
         return id;
@@ -108,5 +112,9 @@ public class CarFilter {
 
     public void setIdLessThanEqual(int idLessThanEqual) {
         this.idLessThanEqual = idLessThanEqual;
+    }
+
+    public SegmentFilter<Integer> getCostFilter() {
+        return costFilter;
     }
 }

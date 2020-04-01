@@ -16,6 +16,12 @@ public class CarEntity {
     @Column(name = "number")
     private String number;
 
+    @Column(name = "cost_from")
+    private int costFrom;
+
+    @Column(name = "cost_to")
+    private int costTo;
+
     @ManyToOne
     @JoinColumn(name = "id_model")
     private CarModel model;
