@@ -34,16 +34,8 @@ class PredicateBuilderFactoryTest {
 
     @Test
     void shouldReturnManyToManyCollectionPredicateBuilder() throws NoSuchFieldException {
-        CriteriaBuilder cb = mock(CriteriaBuilder.class);
-
-        String fieldName = "manyToManyCollection";
-        Field field = CarFilter.class.getDeclaredField(fieldName);
-        Object value = new ArrayList<>();
-        Root root = mock(Root.class);
-        CriteriaQuery cq = mock(CriteriaQuery.class);
-        PredicateBuilder builder = new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
-
-        assertThat(builder).isInstanceOf(ManyToManyCollectionPredicateBuilder.class);
+        assertThat(createBuilderForField("manyToManyCollection",  new ArrayList<>()))
+            .isInstanceOf(ManyToManyCollectionPredicateBuilder.class);
     }
 
     @Test
@@ -93,6 +85,15 @@ class PredicateBuilderFactoryTest {
 
         Field field = CarFilter.class.getDeclaredField(fieldName);
         Object value = "";
+        return new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
+    }
+
+    private PredicateBuilder createBuilderForField(String fieldName, Object value) throws NoSuchFieldException {
+        CriteriaBuilder cb = mock(CriteriaBuilder.class);
+        Root root = mock(Root.class);
+        CriteriaQuery cq = mock(CriteriaQuery.class);
+
+        Field field = CarFilter.class.getDeclaredField(fieldName);
         return new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
     }
 }
