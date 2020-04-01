@@ -1,18 +1,15 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Join;
-import lombok.experimental.UtilityClass;
-import org.springframework.lang.NonNull;
-
+import java.lang.reflect.Field;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.lang.reflect.Field;
+import org.springframework.lang.NonNull;
 
 /**
  * @author MikeSafonov
  */
-@UtilityClass
 public class ExpressionBuilder {
 
     /**
@@ -24,7 +21,7 @@ public class ExpressionBuilder {
      * @return return attribute expression from root or joined attribute expression via {@link Join}
      */
     @NonNull
-    public static <E> Expression getExpression(@NonNull Root<E> root, @NonNull Field field,
+    public <E> Expression getExpression(@NonNull Root<E> root, @NonNull Field field,
                                                @NonNull String attributeName, @NonNull Predicate... restrictions) {
         if (field.isAnnotationPresent(Join.class)) {
             Join[] joins = field.getAnnotationsByType(Join.class);

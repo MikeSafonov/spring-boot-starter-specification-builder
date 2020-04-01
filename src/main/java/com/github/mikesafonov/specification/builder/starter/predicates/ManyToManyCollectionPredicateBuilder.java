@@ -1,13 +1,12 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
 import com.github.mikesafonov.specification.builder.starter.ExpressionBuilder;
-import lombok.RequiredArgsConstructor;
-
-import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.persistence.criteria.*;
+import lombok.RequiredArgsConstructor;
 
 /**
  * The predicate is constructed according to the following scheme:
@@ -25,6 +24,7 @@ public class ManyToManyCollectionPredicateBuilder<T> implements PredicateBuilder
     private final Collection fieldValue;
     private final Field field;
     private final String fieldName;
+    private final ExpressionBuilder expressionBuilder;
 
     @Override
     public Predicate build() {
@@ -33,7 +33,7 @@ public class ManyToManyCollectionPredicateBuilder<T> implements PredicateBuilder
             Subquery<T> sq = cq.subquery((Class<T>) root.getJavaType());
             Root<T> project = sq.from((Class<T>) root.getJavaType());
 
-            Expression<T> expr = ExpressionBuilder.getExpression(project, field, fieldName, cb.equal(project, root));
+            Expression<T> expr = expressionBuilder.getExpression(project, field, fieldName, cb.equal(project, root));
             sq.select(project).where(cb.equal(expr, filter));
             predicates.add(cb.exists(sq));
         }
