@@ -1,16 +1,16 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.base.cars.*;
-import com.github.mikesafonov.specification.builder.starter.base.studens.ClassEntity;
-import com.github.mikesafonov.specification.builder.starter.base.studens.StudentEntity;
-import com.github.mikesafonov.specification.builder.starter.base.studens.StudentFilter;
-import com.github.mikesafonov.specification.builder.starter.base.studens.StudentRepository;
+import com.github.mikesafonov.specification.builder.starter.base.studens.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- *
  * @author MikeSafonov
  */
 @DataJpaTest
@@ -213,5 +212,46 @@ class SpecificationBuilderTest {
             assertThat(studentEntity.getClassEntities().stream().map(ClassEntity::getName).collect(Collectors.toList())).containsAll(classes);
         });
 
+    }
+
+    @Test
+    void shouldFilterIntersectionOnlyByFrom() {
+        StudentStudyingFilter filter = new StudentStudyingFilter(
+            LocalDate.of(2020, 2, 15),
+            null
+        );
+
+        List<StudentEntity> students = studentRepository.findAll(specificationBuilder.buildSpecification(filter));
+
+        assertEquals(4, students.size());
+        assertThat(students).noneSatisfy(studentEntity -> assertThat(studentEntity.getId()).isEqualTo(1));
+    }
+
+    @Test
+    void shouldFilterIntersectionOnlyByTo() {
+        StudentStudyingFilter filter = new StudentStudyingFilter(
+            null,
+            LocalDate.of(2020, 2, 18)
+        );
+
+        List<StudentEntity> students = studentRepository.findAll(specificationBuilder.buildSpecification(filter));
+
+        assertEquals(4, students.size());
+        assertThat(students).noneSatisfy(studentEntity -> assertThat(studentEntity.getId()).isEqualTo(5));
+    }
+
+    @Test
+    void shouldFilterIntersectionByFullSegment() {
+        StudentStudyingFilter filter = new StudentStudyingFilter(
+            LocalDate.of(2020, 2, 15),
+            LocalDate.of(2020, 2, 18)
+        );
+
+        List<StudentEntity> students = studentRepository.findAll(specificationBuilder.buildSpecification(filter));
+
+        assertEquals(3, students.size());
+        assertThat(students)
+            .noneSatisfy(studentEntity -> assertThat(studentEntity.getId()).isEqualTo(1))
+            .noneSatisfy(studentEntity -> assertThat(studentEntity.getId()).isEqualTo(5));
     }
 }

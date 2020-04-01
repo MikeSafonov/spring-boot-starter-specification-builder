@@ -1,6 +1,8 @@
 package com.github.mikesafonov.specification.builder.starter.base.studens;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -22,6 +24,12 @@ public class StudentEntity {
             joinColumns = @JoinColumn(name = "id_student"),
             inverseJoinColumns = @JoinColumn(name = "id_class"))
     private Set<ClassEntity> classEntities;
+
+    @Column(name = "date_start_studying")
+    private LocalDate studyingDateStart;
+
+    @Column(name = "date_end_studying")
+    private LocalDate studyingDateEnd;
 
     public Integer getId() {
         return id;
@@ -45,5 +53,21 @@ public class StudentEntity {
 
     public void setClassEntities(Set<ClassEntity> classEntities) {
         this.classEntities = classEntities;
+    }
+
+    public LocalDate getStudyingDateStart() {
+        return studyingDateStart;
+    }
+
+    public void setStudyingDateStart(LocalDate studyingDateStart) {
+        this.studyingDateStart = studyingDateStart;
+    }
+
+    public LocalDate getStudyingDateEnd() {
+        return studyingDateEnd;
+    }
+
+    public void setStudyingDateEnd(LocalDate studyingDateEnd) {
+        this.studyingDateEnd = studyingDateEnd;
     }
 }
