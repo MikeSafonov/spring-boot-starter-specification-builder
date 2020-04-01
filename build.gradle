@@ -20,7 +20,7 @@ apply plugin: "info.solidsoft.pitest"
 ext { springBootVersion = "2.2.5.RELEASE" }
 
 group "com.github.mikesafonov"
-version "1.0.0"
+version "1.1.0"
 
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
