@@ -1,3 +1,11 @@
+buildscript {
+    configurations.maybeCreate("pitest")
+    dependencies {
+        classpath "info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.4.6"
+        pitest "org.pitest:pitest-junit5-plugin:0.12"
+    }
+}
+
 plugins {
     id "java"
     id "jacoco"
@@ -7,6 +15,7 @@ plugins {
 apply plugin: "java-library"
 apply plugin: "maven"
 apply plugin: "signing"
+apply plugin: "info.solidsoft.pitest"
 
 ext { springBootVersion = "2.2.5.RELEASE" }
 
@@ -129,4 +138,15 @@ uploadArchives {
             }
         }
     }
+}
+
+pitest {
+    testPlugin = "junit5"
+    targetClasses = ["com.github.mikesafonov.specification.builder.starter.*"]
+    threads = 4
+    outputFormats = ["HTML", "XML"]
+    enableDefaultIncrementalAnalysis = true
+    timestampedReports = false
+    historyInputLocation = ".pitest/pitHistory.txt"
+    historyOutputLocation = ".pitest/pitHistory.txt"
 }
