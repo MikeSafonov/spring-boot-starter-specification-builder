@@ -400,6 +400,45 @@ public class StudentFilter {
 }
 ```
 
+### Filter by segment intersection
+
+The following code example demonstrate how to find entities by segment bounded by fields like `start` and `end`
+and intersect with segment from filter.
+
+Entity:
+```java
+@Entity
+@Table(name = "students")
+public class StudentEntity {
+    @Column(name = "date_start_studying")
+    private LocalDate studyingDateStart;
+
+    @Column(name = "date_end_studying")
+    private LocalDate studyingDateEnd;
+}
+```
+
+Filter:
+
+```java
+public class StudentStudyingFilter {
+    @SegmentIntersection(fromField = "studyingDateStart", toField = "studyingDateEnd")
+    private SegmentFilter<LocalDate> periodFilter;
+    
+    public StudentStudyingFilter(LocalDate from, LocalDate to) {
+        this.periodFilter = new SegmentFilter<>(from, to);
+    }
+}
+```
+
+`SegmentFilter` - special type from `com.github.mikesafonov.specification.builder.starter.type` 
+containing temporal `from` and `to`.
+
+You can use `@Join` annotation with `@SegmentIntersection` to refer to referenced entity.
+
+Segment intersection predicate allow `null` values in `from` and `to` inside `SegmentFilter`,
+and `null` value in entity `toField` what mean not ended segment.
+
 ## Build
 
 ### Build from source
