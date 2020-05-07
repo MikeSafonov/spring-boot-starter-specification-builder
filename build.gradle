@@ -2,7 +2,7 @@ plugins {
     id "java"
     id "jacoco"
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
-    id 'info.solidsoft.pitest' version '1.5.0'
+    id 'info.solidsoft.pitest' version '1.5.1'
 }
 
 apply plugin: "java-library"
