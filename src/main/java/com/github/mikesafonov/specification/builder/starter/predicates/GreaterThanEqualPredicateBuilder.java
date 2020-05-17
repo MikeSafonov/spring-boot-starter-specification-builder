@@ -1,7 +1,5 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
@@ -10,11 +8,15 @@ import javax.persistence.criteria.Predicate;
  *
  * @author MikeSafonov
  */
-@RequiredArgsConstructor
-public class GreaterThanEqualPredicateBuilder implements PredicateBuilder {
+public class GreaterThanEqualPredicateBuilder extends SimplePredicateBuilder {
     private final CriteriaBuilder cb;
     private final Object fieldValue;
-    private final Expression expression;
+
+    public GreaterThanEqualPredicateBuilder(CriteriaBuilder cb, Object fieldValue, Expression expression) {
+        super(expression);
+        this.cb = cb;
+        this.fieldValue = fieldValue;
+    }
 
     @Override
     public Predicate build() {

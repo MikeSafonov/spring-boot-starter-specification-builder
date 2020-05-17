@@ -1,7 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Like;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
@@ -12,15 +11,21 @@ import javax.persistence.criteria.Predicate;
  *
  * @author MikeSafonov
  */
-@RequiredArgsConstructor
-public class LikePredicateBuilder implements PredicateBuilder {
+public class LikePredicateBuilder extends SimplePredicateBuilder {
 
     private static final String PERCENT = "%";
 
     private final CriteriaBuilder cb;
     private final Like like;
     private final Object fieldValue;
-    private final Expression expression;
+
+    public LikePredicateBuilder(CriteriaBuilder cb, Like like, Object fieldValue, Expression expression) {
+        super(expression);
+        this.cb = cb;
+        this.like = like;
+        this.fieldValue = fieldValue;
+    }
+
 
     @Override
     public Predicate build() {

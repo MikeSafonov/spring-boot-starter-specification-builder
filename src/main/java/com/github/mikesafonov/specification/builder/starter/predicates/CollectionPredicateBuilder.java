@@ -1,7 +1,5 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import java.util.Collection;
@@ -11,10 +9,13 @@ import java.util.Collection;
  *
  * @author MikeSafonov
  */
-@RequiredArgsConstructor
-public class CollectionPredicateBuilder implements PredicateBuilder {
+public class CollectionPredicateBuilder extends SimplePredicateBuilder {
     private final Collection fieldValue;
-    private final Expression expression;
+
+    public CollectionPredicateBuilder(Collection fieldValue, Expression expression) {
+        super(expression);
+        this.fieldValue = fieldValue;
+    }
 
     @Override
     public Predicate build() {

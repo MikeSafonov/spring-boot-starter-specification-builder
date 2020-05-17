@@ -1,7 +1,5 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
-import lombok.RequiredArgsConstructor;
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
@@ -11,10 +9,14 @@ import javax.persistence.criteria.Predicate;
  *
  * @author MikeSafonov
  */
-@RequiredArgsConstructor
-public class NullPredicateBuilder implements PredicateBuilder {
+public class NullPredicateBuilder extends SimplePredicateBuilder {
+
     private final CriteriaBuilder cb;
-    private final Expression expression;
+
+    public NullPredicateBuilder(CriteriaBuilder cb, Expression expression) {
+        super(expression);
+        this.cb = cb;
+    }
 
     @Override
     public Predicate build() {
