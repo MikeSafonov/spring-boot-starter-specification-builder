@@ -1,14 +1,16 @@
 package com.github.mikesafonov.specification.builder.starter.base.studens;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
  *
  * @author MikeSafonov
  */
+@Data
 @Entity
 @Table(name = "students")
 public class StudentEntity {
@@ -30,44 +32,4 @@ public class StudentEntity {
 
     @Column(name = "date_end_studying")
     private LocalDate studyingDateEnd;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<ClassEntity> getClassEntities() {
-        return classEntities;
-    }
-
-    public void setClassEntities(Set<ClassEntity> classEntities) {
-        this.classEntities = classEntities;
-    }
-
-    public LocalDate getStudyingDateStart() {
-        return studyingDateStart;
-    }
-
-    public void setStudyingDateStart(LocalDate studyingDateStart) {
-        this.studyingDateStart = studyingDateStart;
-    }
-
-    public LocalDate getStudyingDateEnd() {
-        return studyingDateEnd;
-    }
-
-    public void setStudyingDateEnd(LocalDate studyingDateEnd) {
-        this.studyingDateEnd = studyingDateEnd;
-    }
 }

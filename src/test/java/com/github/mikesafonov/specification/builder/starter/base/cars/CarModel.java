@@ -1,11 +1,14 @@
 package com.github.mikesafonov.specification.builder.starter.base.cars;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
  *
  * @author MikeSafonov
  */
+@Data
 @Entity
 @Table(name = "car_models")
 public class CarModel {
@@ -15,20 +18,4 @@ public class CarModel {
 
     @Column(name = "name")
     private String name;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

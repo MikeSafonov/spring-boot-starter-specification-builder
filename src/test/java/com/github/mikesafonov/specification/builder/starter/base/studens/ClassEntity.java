@@ -1,11 +1,14 @@
 package com.github.mikesafonov.specification.builder.starter.base.studens;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 /**
  *
  * @author MikeSafonov
  */
+@Data
 @Entity
 @Table(name = "classes")
 public class ClassEntity {
@@ -15,20 +18,4 @@ public class ClassEntity {
 
     @Column(name = "name")
     private String name;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
