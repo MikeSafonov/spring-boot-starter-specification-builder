@@ -15,11 +15,11 @@ import java.util.Collection;
  *
  * @author MikeSafonov
  */
-public class PredicateBuilderFactory<T> {
+public class PredicateBuilderFactory {
     private final ExpressionBuilder expressionBuilder = new ExpressionBuilder();
 
     @org.springframework.lang.NonNull
-    public PredicateBuilder createPredicateBuilder(
+    public <T> PredicateBuilder createPredicateBuilder(
             @org.springframework.lang.NonNull Root<T> root,
             @org.springframework.lang.NonNull CriteriaBuilder cb,
             @org.springframework.lang.NonNull CriteriaQuery<?> cq,
@@ -35,7 +35,7 @@ public class PredicateBuilderFactory<T> {
         if (Collection.class.isAssignableFrom(fieldValue.getClass())) {
             Collection collection = (Collection) fieldValue;
             if (field.isAnnotationPresent(ManyToManyCollection.class)) {
-                return new ManyToManyCollectionPredicateBuilder(root, cb, cq, collection, field, fieldName, expressionBuilder);
+                return new ManyToManyCollectionPredicateBuilder<>(root, cb, cq, collection, field, fieldName, expressionBuilder);
             }
             return new CollectionPredicateBuilder(collection, expressionBuilder.getExpression(root, field, fieldName));
         }
