@@ -3,14 +3,16 @@ package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Ignore;
 import com.github.mikesafonov.specification.builder.starter.annotations.IsNull;
-import com.github.mikesafonov.specification.builder.starter.annotations.Name;
 import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilderFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
@@ -29,10 +31,10 @@ public class SpecificationBuilder {
         List<Field> fields = Utils.getFields(filter);
         return (root, query, cb) -> {
             Predicate[] predicates = fields.stream()
-                    .filter(this::isFieldSupported)
-                    .map(field -> toPredicate(field, root, cb, query, filter))
-                    .filter(Objects::nonNull)
-                    .toArray(Predicate[]::new);
+                .filter(this::isFieldSupported)
+                .map(field -> toPredicate(field, root, cb, query, filter))
+                .filter(Objects::nonNull)
+                .toArray(Predicate[]::new);
             return cb.and(predicates);
         };
     }
@@ -49,24 +51,15 @@ public class SpecificationBuilder {
                                          @NonNull F filter) {
         Object fieldValue = Utils.getFieldValue(field, filter);
         if (Utils.isNotNullAndNotBlank(fieldValue) || field.isAnnotationPresent(IsNull.class)
-                || field.isAnnotationPresent(com.github.mikesafonov.specification.builder.starter.annotations.NonNull.class)) {
-            String fieldName = getFieldName(field);
-            return toPredicate(root, cb, cq, field, fieldName, fieldValue);
+            || field.isAnnotationPresent(com.github.mikesafonov.specification.builder.starter.annotations.NonNull.class)) {
+            return toPredicate(root, cb, cq, new FieldWithValue(field, fieldValue));
         }
         return null;
     }
 
     @NonNull
-    private String getFieldName(@NonNull Field field) {
-        return field.isAnnotationPresent(Name.class)
-                ? field.getAnnotation(Name.class).value()
-                : field.getName();
-    }
-
-    @NonNull
     private <S> Predicate toPredicate(@NonNull Root<S> root, @NonNull CriteriaBuilder cb,
-                                      @NonNull CriteriaQuery<?> cq, @NonNull Field field,
-                                      @NonNull String fieldName, @NonNull Object fieldValue) {
-        return factory.createPredicateBuilder(root, cb, cq, field, fieldValue, fieldName).build();
+                                      @NonNull CriteriaQuery<?> cq, @NonNull FieldWithValue field) {
+        return factory.createPredicateBuilder(root, cb, cq, field).build();
     }
 }

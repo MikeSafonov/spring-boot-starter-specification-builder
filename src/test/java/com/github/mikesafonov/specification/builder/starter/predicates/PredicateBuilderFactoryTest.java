@@ -1,5 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
+import com.github.mikesafonov.specification.builder.starter.FieldWithValue;
 import com.github.mikesafonov.specification.builder.starter.base.cars.CarFilter;
 import com.github.mikesafonov.specification.builder.starter.type.SegmentFilter;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ class PredicateBuilderFactoryTest {
         Object value = new ArrayList<>();
         Root root = mock(Root.class);
         CriteriaQuery cq = mock(CriteriaQuery.class);
-        PredicateBuilder builder = new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
+        PredicateBuilder builder = new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, new FieldWithValue(field, value));
 
         assertThat(builder).isInstanceOf(CollectionPredicateBuilder.class);
     }
@@ -90,6 +91,6 @@ class PredicateBuilderFactoryTest {
         CriteriaQuery cq = mock(CriteriaQuery.class);
 
         Field field = CarFilter.class.getDeclaredField(fieldName);
-        return new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, field, value, fieldName);
+        return new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, new FieldWithValue(field, value));
     }
 }

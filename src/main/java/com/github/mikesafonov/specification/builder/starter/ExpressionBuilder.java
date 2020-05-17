@@ -1,16 +1,30 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Join;
-import java.lang.reflect.Field;
+import org.springframework.lang.NonNull;
+
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import org.springframework.lang.NonNull;
+import java.lang.reflect.Field;
 
 /**
  * @author MikeSafonov
  */
 public class ExpressionBuilder {
+
+    /**
+     * @param root         entity root
+     * @param field        field for expression
+     * @param restrictions on restrictions
+     * @param <E>          entity type
+     * @return return attribute expression from root or joined attribute expression via {@link Join}
+     */
+    @NonNull
+    public <E> Expression getExpression(@NonNull Root<E> root, @NonNull FieldWithValue field,
+                                        @NonNull Predicate... restrictions) {
+        return getExpression(root, field.getField(), field.getFieldName(), restrictions);
+    }
 
     /**
      * @param root          entity root
@@ -22,7 +36,7 @@ public class ExpressionBuilder {
      */
     @NonNull
     public <E> Expression getExpression(@NonNull Root<E> root, @NonNull Field field,
-                                               @NonNull String attributeName, @NonNull Predicate... restrictions) {
+                                        @NonNull String attributeName, @NonNull Predicate... restrictions) {
         if (field.isAnnotationPresent(Join.class)) {
             Join[] joins = field.getAnnotationsByType(Join.class);
             javax.persistence.criteria.Join<Object, Object> join = root.join(joins[0].value(), joins[0].type()).on(restrictions);
