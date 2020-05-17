@@ -24,7 +24,7 @@ public class LikePredicateBuilder implements PredicateBuilder {
     @Override
     public Predicate build() {
         String searchValue = getSearchValue();
-        Expression<String> expr = expression;
+        Expression<String> expr = expression.as(String.class);;
         if (!like.caseSensitive()) {
             expr = cb.upper(expr);
             searchValue = searchValue.toUpperCase();

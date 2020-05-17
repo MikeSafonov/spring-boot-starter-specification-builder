@@ -36,10 +36,11 @@ class LikePredicateBuilderTest {
         Like like = getLike(direction, true);
         LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, value, expression);
 
+        when(expression.as(String.class)).thenReturn(expression);
+
         builder.build();
 
         verify(cb).like(expression, expectedValue);
-        verifyNoMoreInteractions(expression);
     }
 
     @ParameterizedTest
@@ -52,12 +53,12 @@ class LikePredicateBuilderTest {
         Like like = getLike(direction, false);
         LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, value, expression);
 
+        when(expression.as(String.class)).thenReturn(expression);
         when(cb.upper(expression)).thenReturn(upperExpression);
 
         builder.build();
 
         verify(cb).like(upperExpression, expectedValue.toUpperCase());
-        verifyNoMoreInteractions(expression);
     }
 
     private Like getLike(Like.DIRECTION direction, boolean caseSensitive) {

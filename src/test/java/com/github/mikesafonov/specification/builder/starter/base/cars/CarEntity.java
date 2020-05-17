@@ -49,4 +49,12 @@ public class CarEntity {
     public CarModel getModel() {
         return model;
     }
+
+    public int getCostFrom() {
+        return costFrom;
+    }
+
+    public int getCostTo() {
+        return costTo;
+    }
 }

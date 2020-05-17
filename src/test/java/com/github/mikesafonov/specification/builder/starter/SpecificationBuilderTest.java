@@ -113,7 +113,7 @@ class SpecificationBuilderTest {
     }
 
     @Nested
-    class GreaterThan extends BaseTest{
+    class GreaterThan extends BaseTest {
 
         @Test
         void shouldFindByGreaterThan() {
@@ -129,7 +129,7 @@ class SpecificationBuilderTest {
     }
 
     @Nested
-    class GreaterThanEqual extends BaseTest{
+    class GreaterThanEqual extends BaseTest {
 
         @Test
         void shouldFindByGreaterThanEqual() {
@@ -230,6 +230,18 @@ class SpecificationBuilderTest {
             assertThat(data.get(0)).satisfies(carModel -> {
                 assertThat(carModel.getId()).isEqualTo(2);
                 assertThat(carModel.getName()).isEqualTo("volvo");
+            });
+        }
+
+        @Test
+        void shouldLikeByCastedField() {
+            CostToLikeFilter filter = new CostToLikeFilter();
+            filter.setKey("20");
+
+            List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(filter));
+            assertEquals(1, data.size());
+            assertThat(data.get(0)).satisfies(carModel -> {
+                assertThat(carModel.getCostTo()).isEqualTo(20);
             });
         }
     }
