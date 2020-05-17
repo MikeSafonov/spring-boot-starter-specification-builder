@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
  */
 @RequiredArgsConstructor
 public class LikePredicateBuilder implements PredicateBuilder {
+
     private static final String PERCENT = "%";
 
     private final CriteriaBuilder cb;
@@ -24,7 +25,7 @@ public class LikePredicateBuilder implements PredicateBuilder {
     @Override
     public Predicate build() {
         String searchValue = getSearchValue();
-        Expression<String> expr = expression.as(String.class);;
+        Expression<String> expr = expression.as(String.class);
         if (!like.caseSensitive()) {
             expr = cb.upper(expr);
             searchValue = searchValue.toUpperCase();
@@ -34,15 +35,12 @@ public class LikePredicateBuilder implements PredicateBuilder {
 
     private String getSearchValue() {
         switch (like.direction()) {
-            case LEFT: {
+            case LEFT:
                 return PERCENT + fieldValue;
-            }
-            case RIGHT: {
+            case RIGHT:
                 return fieldValue + PERCENT;
-            }
-            default: {
+            default:
                 return PERCENT + fieldValue + PERCENT;
-            }
         }
     }
 }
