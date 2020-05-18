@@ -32,7 +32,7 @@ Using `maven`:
     <dependency>
       <groupId>com.github.mikesafonov</groupId>
       <artifactId>spring-boot-starter-specification-builder</artifactId>
-      <version>1.0.0</version>
+      <version>1.2.0</version>
     </dependency>
 
 ## Usage
