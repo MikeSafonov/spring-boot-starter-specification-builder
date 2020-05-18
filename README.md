@@ -24,7 +24,7 @@ The starter is available at `maven central` repository.
 Using `gradle`: 
     
     dependencies {
-        implementation 'com.github.mikesafonov:spring-boot-starter-specification-builder:1.0.0'
+        implementation 'com.github.mikesafonov:spring-boot-starter-specification-builder:1.2.0'
     }
 
 Using `maven`:
