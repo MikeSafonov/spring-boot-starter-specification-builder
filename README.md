@@ -125,6 +125,40 @@ public class CarFilter {
 }
 ```
 
+### Filter by several columns by one expression
+
+The following code example demonstrates how to filter by several columns by one expression:
+
+Entity:
+```java
+@Entity
+@Table(name = "cars")
+public class CarEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "number")
+    private String number;
+    @Column(name = "cost_from")
+    private int costFrom;
+    @Column(name = "cost_to")
+    private int costTo;
+    @ManyToOne
+    @JoinColumn(name = "id_model")
+    private CarModel model;
+}
+```
+
+Filter:
+```java
+@Data
+public class CostGreaterThenCarFilter {
+    @GreaterThan
+    @Names(value = {"costFrom", "costTo"}, type = Names.SearchType.AND)
+    private Integer value;
+}
+```
+
 ### Ignore specific field in filter
 
 The following code example demonstrates how to ignore specific field in filter:

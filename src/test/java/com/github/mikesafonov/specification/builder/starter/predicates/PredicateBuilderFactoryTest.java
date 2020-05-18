@@ -3,6 +3,7 @@ package com.github.mikesafonov.specification.builder.starter.predicates;
 import com.github.mikesafonov.specification.builder.starter.FieldWithValue;
 import com.github.mikesafonov.specification.builder.starter.base.cars.CarFilter;
 import com.github.mikesafonov.specification.builder.starter.type.SegmentFilter;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,13 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 /**
- *
  * @author MikeSafonov
  */
 class PredicateBuilderFactoryTest {
 
     @Test
-    void shouldReturnCollectionPredicateBuilder() throws NoSuchFieldException {
+    @SneakyThrows
+    void shouldReturnCollectionPredicateBuilder() {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
 
         String fieldName = "collection";
@@ -35,57 +36,68 @@ class PredicateBuilderFactoryTest {
     }
 
     @Test
-    void shouldReturnManyToManyCollectionPredicateBuilder() throws NoSuchFieldException {
-        assertThat(createBuilderForField("manyToManyCollection",  new ArrayList<>()))
+    void shouldReturnManyToManyCollectionPredicateBuilder() {
+        assertThat(createBuilderForField("manyToManyCollection", new ArrayList<>()))
             .isInstanceOf(ManyToManyCollectionPredicateBuilder.class);
     }
 
     @Test
-    void shouldReturnLikePredicateBuilder() throws NoSuchFieldException {
+    void shouldReturnLikePredicateBuilder() {
         assertThat(createBuilderForField("likeValue")).isInstanceOf(LikePredicateBuilder.class);
     }
 
     @Test
-    void shouldReturnNotNullPredicateBuilder() throws NoSuchFieldException {
+    void shouldReturnNotNullPredicateBuilder() {
         assertThat(createBuilderForField("nonNullValue")).isInstanceOf(NotNullPredicateBuilder.class);
     }
 
     @Test
-    void shouldReturnNullPredicateBuilder() throws NoSuchFieldException {
+    void shouldReturnNullPredicateBuilder() {
         assertThat(createBuilderForField("nullValue")).isInstanceOf(NullPredicateBuilder.class);
     }
 
     @Test
-    void shouldReturnEqualsPredicateBuilder() throws NoSuchFieldException {
+    void shouldReturnEqualsPredicateBuilder() {
         assertThat(createBuilderForField("id")).isInstanceOf(EqualsPredicateBuilder.class);
     }
 
     @Test
-    void shouldReturnGreaterThanEqualsPredicateBuilder() throws NoSuchFieldException {
+    void shouldReturnGreaterThanEqualsPredicateBuilder() {
         assertThat(createBuilderForField("idGreaterThanEqual")).isInstanceOf(GreaterThanEqualPredicateBuilder.class);
     }
 
     @Test
-    void shouldReturnGreaterThanPredicateBuilder() throws NoSuchFieldException {
+    void shouldReturnGreaterThanPredicateBuilder() {
         assertThat(createBuilderForField("idGreaterThan")).isInstanceOf(GreaterThanPredicateBuilder.class);
     }
 
     @Test
-    void shouldReturnLessThanEqualsPredicateBuilder() throws NoSuchFieldException {
+    void shouldReturnLessThanEqualsPredicateBuilder() {
         assertThat(createBuilderForField("idLessThanEqual")).isInstanceOf(LessThanEqualPredicateBuilder.class);
     }
 
     @Test
-    void shouldReturnSegmentIntersectionPredicateBuilder() throws NoSuchFieldException {
+    void shouldReturnSegmentIntersectionPredicateBuilder() {
         assertThat(createBuilderForField("costFilter", new SegmentFilter<>(1, 5)))
             .isInstanceOf(SegmentIntersectionPredicateBuilder.class);
     }
 
-    private PredicateBuilder createBuilderForField(String fieldName) throws NoSuchFieldException {
-       return createBuilderForField(fieldName, "");
+    @Test
+    void shouldCreateAndPredicateBuilder() {
+        assertThat(createBuilderForField("namesNonNullAnd")).isInstanceOf(AndPredicateBuilder.class);
     }
 
-    private PredicateBuilder createBuilderForField(String fieldName, Object value) throws NoSuchFieldException {
+    @Test
+    void shouldCreateOrPredicateBuilder() {
+        assertThat(createBuilderForField("namesNonNull")).isInstanceOf(OrPredicateBuilder.class);
+    }
+
+    private PredicateBuilder createBuilderForField(String fieldName) {
+        return createBuilderForField(fieldName, "");
+    }
+
+    @SneakyThrows
+    private PredicateBuilder createBuilderForField(String fieldName, Object value) {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
         Root root = mock(Root.class);
         CriteriaQuery cq = mock(CriteriaQuery.class);

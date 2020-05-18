@@ -7,11 +7,11 @@ import lombok.Data;
 import java.util.Collection;
 
 /**
- *
  * @author MikeSafonov
  */
 @Data
 public class CarFilter {
+
     private Integer id;
     @Name("number")
     private String car;
@@ -51,5 +51,13 @@ public class CarFilter {
 
     @SegmentIntersection(fromField = "costFrom", toField = "costTo")
     private SegmentFilter<Integer> costFilter;
+
+    @Names({"id", "number"})
+    @NonNull
+    private Object namesNonNull;
+
+    @Names(value = {"id", "number"}, type = Names.SearchType.AND)
+    @NonNull
+    private Object namesNonNullAnd;
 
 }

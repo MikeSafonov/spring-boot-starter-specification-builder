@@ -1,6 +1,9 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.base.cars.*;
+import com.github.mikesafonov.specification.builder.starter.base.persons.PersonEntity;
+import com.github.mikesafonov.specification.builder.starter.base.persons.PersonNameOrSurnameFilter;
+import com.github.mikesafonov.specification.builder.starter.base.persons.PersonRepository;
 import com.github.mikesafonov.specification.builder.starter.base.studens.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -34,6 +37,8 @@ class SpecificationBuilderTest {
         CarModelRepository carModelRepository;
         @Autowired
         StudentRepository studentRepository;
+        @Autowired
+        PersonRepository personRepository;
 
         SpecificationBuilder specificationBuilder;
 
@@ -70,15 +75,15 @@ class SpecificationBuilderTest {
         @Test
         void shouldFindByJoin() {
             ModelCarFilter carFilter = new ModelCarFilter();
-            carFilter.setModel("volvo");
+            carFilter.setModel("audi");
             List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(carFilter));
             assertEquals(1, data.size());
             assertThat(data.get(0)).satisfies(carEntity -> {
-                assertThat(carEntity.getId()).isEqualTo(2);
-                assertThat(carEntity.getNumber()).isEqualTo("2312");
+                assertThat(carEntity.getId()).isEqualTo(1);
+                assertThat(carEntity.getNumber()).isEqualTo("123");
                 assertThat(carEntity.getModel()).satisfies(carModel -> {
-                    assertThat(carModel.getId()).isEqualTo(2);
-                    assertThat(carModel.getName()).isEqualTo("volvo");
+                    assertThat(carModel.getId()).isEqualTo(1);
+                    assertThat(carModel.getName()).isEqualTo("audi");
                 });
             });
         }
@@ -324,5 +329,65 @@ class SpecificationBuilderTest {
                 .noneSatisfy(studentEntity -> assertThat(studentEntity.getId()).isEqualTo(1))
                 .noneSatisfy(studentEntity -> assertThat(studentEntity.getId()).isEqualTo(5));
         }
+    }
+
+    @Nested
+    class Names {
+
+        @Nested
+        class And extends BaseTest {
+
+            @Test
+            void shouldReturnByTwoCostFields() {
+                AndCostGreaterThenCarFilter filter = new AndCostGreaterThenCarFilter();
+                filter.setValue(40);
+
+                List<CarEntity> cars = carRepository.findAll(specificationBuilder.buildSpecification(filter));
+                assertEquals(1, cars.size());
+                assertThat(cars.get(0)).satisfies(carEntity -> {
+                    assertThat(carEntity.getCostTo()).isGreaterThan(40);
+                    assertThat(carEntity.getCostFrom()).isGreaterThan(40);
+                });
+            }
+        }
+
+        @Nested
+        class Or extends BaseTest {
+
+            @Test
+            void shouldReturnByOneOfTwoCostFields() {
+                OrCostGreaterThenCarFilter filter = new OrCostGreaterThenCarFilter();
+                filter.setValue(40);
+
+                List<CarEntity> cars = carRepository.findAll(specificationBuilder.buildSpecification(filter));
+                assertEquals(2, cars.size());
+                assertThat(cars).extracting("id").containsOnly(1, 3);
+            }
+        }
+
+        @Nested
+        class Joined extends BaseTest {
+
+            @Test
+            void shouldFindByNameOrSurname(){
+                PersonNameOrSurnameFilter filter = new PersonNameOrSurnameFilter();
+                filter.setValue("Jon");
+
+                List<PersonEntity> persons = personRepository.findAll(specificationBuilder.buildSpecification(filter));
+                assertEquals(2, persons.size());
+                assertThat(persons).extracting("id").containsOnly(1, 2);
+            }
+
+            @Test
+            void shouldReturnEmpty(){
+                PersonNameOrSurnameFilter filter = new PersonNameOrSurnameFilter();
+                filter.setValue("Andy");
+
+                List<PersonEntity> persons = personRepository.findAll(specificationBuilder.buildSpecification(filter));
+                assertThat(persons).isEmpty();
+            }
+
+        }
+
     }
 }

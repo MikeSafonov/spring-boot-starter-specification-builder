@@ -11,4 +11,7 @@ import lombok.Data;
 public class NonNullCarModelFilter {
     @NonNull
     private String name;
+
+    public NonNullCarModelFilter() {
+    }
 }

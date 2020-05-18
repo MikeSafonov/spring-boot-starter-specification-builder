@@ -6,6 +6,7 @@ import com.github.mikesafonov.specification.builder.starter.annotations.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 
 /**
@@ -24,31 +25,23 @@ public class PredicateBuilderFactory {
         @org.springframework.lang.NonNull CriteriaQuery<?> cq,
         @org.springframework.lang.NonNull FieldWithValue field) {
 
-        if (field.isAnnotatedBy(IsNull.class)) {
-            return new NullPredicateBuilder(cb, expressionBuilder.getExpression(root, field));
-        }
-        if (field.isAnnotatedBy(NonNull.class)) {
-            return new NotNullPredicateBuilder(cb, expressionBuilder.getExpression(root, field));
-        }
-        if (field.isValueCollection()) {
-            if (field.isAnnotatedBy(ManyToManyCollection.class)) {
-                return new ManyToManyCollectionPredicateBuilder<>(root, cb, cq, field, expressionBuilder);
+        if (field.isAnnotatedBy(Names.class)) {
+            Names names = field.getAnnotation(Names.class);
+            Expression[] expressions = expressionBuilder.getExpressions(root, field, names.value());
+            if (names.type() == Names.SearchType.AND) {
+                return new AndPredicateBuilder(cb, expressions,
+                    expression -> getSimplePredicateBuilder(cb, field, expression));
+            } else {
+                return new OrPredicateBuilder(cb, expressions,
+                    expression -> getSimplePredicateBuilder(cb, field, expression));
             }
-            return new CollectionPredicateBuilder(field.getValueAsCollection(),
-                expressionBuilder.getExpression(root, field));
         }
-        if (field.isAnnotatedBy(Like.class)) {
-            return new LikePredicateBuilder(cb, field.getAnnotation(Like.class), field.getValue(),
-                expressionBuilder.getExpression(root, field));
-        } else if (field.isAnnotatedBy(GreaterThan.class)) {
-            return new GreaterThanPredicateBuilder(cb, field.getValue(), expressionBuilder.getExpression(root, field));
-        } else if (field.isAnnotatedBy(GreaterThanEqual.class)) {
-            return new GreaterThanEqualPredicateBuilder(cb, field.getValue(), expressionBuilder.getExpression(root, field));
-        } else if (field.isAnnotatedBy(LessThan.class)) {
-            return new LessThanPredicateBuilder(cb, field.getValue(), expressionBuilder.getExpression(root, field));
-        } else if (field.isAnnotatedBy(LessThanEqual.class)) {
-            return new LessThanEqualPredicateBuilder(cb, field.getValue(), expressionBuilder.getExpression(root, field));
-        } else if (field.isAnnotatedBy(SegmentIntersection.class) && field.isValueSegmentFilter()) {
+
+        if (field.isAnnotatedBy(ManyToManyCollection.class) && field.isValueCollection()) {
+            return new ManyToManyCollectionPredicateBuilder<>(root, cb, cq, field, expressionBuilder);
+        }
+
+        if (field.isAnnotatedBy(SegmentIntersection.class) && field.isValueSegmentFilter()) {
             return new SegmentIntersectionPredicateBuilder<>(
                 root,
                 field.getField(),
@@ -58,6 +51,33 @@ public class PredicateBuilderFactory {
                 expressionBuilder
             );
         }
-        return new EqualsPredicateBuilder(cb, field.getValue(), expressionBuilder.getExpression(root, field));
+
+        return getSimplePredicateBuilder(cb, field, expressionBuilder.getExpression(root, field));
+    }
+
+    private SimplePredicateBuilder getSimplePredicateBuilder(CriteriaBuilder cb,
+                                                             FieldWithValue field, Expression expression) {
+        if (field.isAnnotatedBy(IsNull.class)) {
+            return new NullPredicateBuilder(cb, expression);
+        }
+        if (field.isAnnotatedBy(NonNull.class)) {
+            return new NotNullPredicateBuilder(cb, expression);
+        }
+        if (field.isValueCollection()) {
+            return new CollectionPredicateBuilder(field.getValueAsCollection(), expression);
+        }
+        if (field.isAnnotatedBy(Like.class)) {
+            return new LikePredicateBuilder(cb, field.getAnnotation(Like.class), field.getValue(),
+                expression);
+        } else if (field.isAnnotatedBy(GreaterThan.class)) {
+            return new GreaterThanPredicateBuilder(cb, field.getValue(), expression);
+        } else if (field.isAnnotatedBy(GreaterThanEqual.class)) {
+            return new GreaterThanEqualPredicateBuilder(cb, field.getValue(), expression);
+        } else if (field.isAnnotatedBy(LessThan.class)) {
+            return new LessThanPredicateBuilder(cb, field.getValue(), expression);
+        } else if (field.isAnnotatedBy(LessThanEqual.class)) {
+            return new LessThanEqualPredicateBuilder(cb, field.getValue(), expression);
+        }
+        return new EqualsPredicateBuilder(cb, field.getValue(), expression);
     }
 }

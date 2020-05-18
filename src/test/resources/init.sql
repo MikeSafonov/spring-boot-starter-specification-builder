@@ -3,6 +3,8 @@ DELETE FROM car_models;
 DELETE FROM students_classes;
 DELETE FROM students;
 DELETE FROM classes;
+DELETE FROM persons;
+DELETE FROM person_infos;
 
 insert into car_models(id, name)
 values (1, 'audi'),
@@ -11,7 +13,8 @@ values (1, 'audi'),
 
 insert into cars(id, number, id_model, cost_from, cost_to)
 values (1, '123', 1, 10, 50),
-       (2, '2312', 2, 15, 20);
+       (2, '2312', 2, 15, 20),
+       (3, '2312', 2, 45, 50);
 
 
 insert into students(id, name, date_start_studying, date_end_studying)
@@ -30,5 +33,8 @@ insert into students_classes(id_student, id_class)
 values(1,1), (1,2), (2,1), (3,2), (4,1), (4,2), (4,3), (5,2), (5,3);
 
 
+insert into persons(id) values (1), (2), (3);
 
+insert into person_infos(id, name, surname, id_person) values
+(1, 'Jon','Doe',1), (2, 'Mike','Jonson',2), (3, 'Jenkins','Jenkinson',3);
 
