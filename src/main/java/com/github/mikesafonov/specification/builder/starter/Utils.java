@@ -8,6 +8,7 @@ import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -29,6 +30,10 @@ class Utils {
             if (value instanceof String) {
                 String stringValue = ((String) value);
                 return !stringValue.trim().isEmpty();
+            }
+            if(value instanceof Collection){
+                Collection collection = (Collection) value;
+                return !collection.isEmpty();
             }
             return true;
         }
