@@ -1,6 +1,7 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Join;
+import com.github.mikesafonov.specification.builder.starter.annotations.Joins;
 import lombok.experimental.UtilityClass;
 import org.springframework.lang.NonNull;
 
@@ -26,7 +27,7 @@ public class ExpressionBuilder {
     @NonNull
     public static <E> Expression getExpression(@NonNull Root<E> root, @NonNull Field field,
                                                @NonNull String attributeName, @NonNull Predicate... restrictions) {
-        if (field.isAnnotationPresent(Join.class)) {
+        if (field.isAnnotationPresent(Join.class) || field.isAnnotationPresent(Joins.class)) {
             Join[] joins = field.getAnnotationsByType(Join.class);
             javax.persistence.criteria.Join<Object, Object> join = root.join(joins[0].value(), joins[0].type()).on(restrictions);
             for (int i = 1; i < joins.length; i++) {
