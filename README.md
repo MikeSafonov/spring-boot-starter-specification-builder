@@ -24,7 +24,7 @@ The starter is available at `maven central` repository.
 Using `gradle`: 
     
     dependencies {
-        implementation 'com.github.mikesafonov:spring-boot-starter-specification-builder:1.2.0'
+        implementation 'com.github.mikesafonov:spring-boot-starter-specification-builder:version'
     }
 
 Using `maven`:
@@ -32,7 +32,7 @@ Using `maven`:
     <dependency>
       <groupId>com.github.mikesafonov</groupId>
       <artifactId>spring-boot-starter-specification-builder</artifactId>
-      <version>1.2.0</version>
+      <version>version</version>
     </dependency>
 
 ## Usage
@@ -472,6 +472,19 @@ You can use `@Join` annotation with `@SegmentIntersection` to refer to reference
 
 Segment intersection predicate allow `null` values in `from` and `to` inside `SegmentFilter`,
 and `null` value in entity `toField` what mean not ended segment.
+
+## Debug
+
+You may turn on additional logging to debug created predicates:
+
+    logging:
+      level:
+        com:
+          github:
+            mikesafonov:
+              specification:
+                builder:
+                  starter: trace
 
 ## Build
 
