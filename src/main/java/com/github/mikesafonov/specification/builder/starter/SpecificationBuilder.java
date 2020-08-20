@@ -29,11 +29,13 @@ public class SpecificationBuilder {
 
     public <F, S> Specification<S> buildSpecification(@NonNull F filter) {
         List<Field> fields = Utils.getFields(filter);
+        log.trace("SB-Filter:  " + filter);
         return (root, query, cb) -> {
             Predicate[] predicates = fields.stream()
                 .filter(this::isFieldSupported)
                 .map(field -> toPredicate(field, root, cb, query, filter))
                 .filter(Objects::nonNull)
+                .peek(predicate -> log.trace("SB-Predicate: " + predicate.toString()))
                 .toArray(Predicate[]::new);
             return cb.and(predicates);
         };
