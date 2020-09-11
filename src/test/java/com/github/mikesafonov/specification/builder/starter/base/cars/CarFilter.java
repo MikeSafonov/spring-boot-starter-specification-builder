@@ -60,4 +60,8 @@ public class CarFilter {
     @NonNull
     private Object namesNonNullAnd;
 
+    @Not
+    @IsNull
+    @Name("number")
+    private String notNullValue;
 }

@@ -92,6 +92,11 @@ class PredicateBuilderFactoryTest {
         assertThat(createBuilderForField("namesNonNull")).isInstanceOf(OrPredicateBuilder.class);
     }
 
+    @Test
+    void shouldCreateNotPredicateBuilder() {
+        assertThat(createBuilderForField("notNullValue")).isInstanceOf(NotPredicateBuilder.class);
+    }
+
     private PredicateBuilder createBuilderForField(String fieldName) {
         return createBuilderForField(fieldName, "");
     }

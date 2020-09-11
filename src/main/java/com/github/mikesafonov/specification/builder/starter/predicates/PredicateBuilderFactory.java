@@ -52,7 +52,14 @@ public class PredicateBuilderFactory {
             );
         }
 
-        return getSimplePredicateBuilder(cb, field, expressionBuilder.getExpression(root, field));
+        PredicateBuilder predicateBuilder =
+                getSimplePredicateBuilder(cb, field, expressionBuilder.getExpression(root, field));
+
+        if (field.isAnnotatedBy(Not.class)) {
+            return new NotPredicateBuilder(cb, predicateBuilder);
+        }
+
+        return predicateBuilder;
     }
 
     private SimplePredicateBuilder getSimplePredicateBuilder(CriteriaBuilder cb,

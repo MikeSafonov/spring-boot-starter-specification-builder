@@ -473,6 +473,33 @@ You can use `@Join` annotation with `@SegmentIntersection` to refer to reference
 Segment intersection predicate allow `null` values in `from` and `to` inside `SegmentFilter`,
 and `null` value in entity `toField` what mean not ended segment.
 
+### `Not` predicate
+
+`Not` predicate negates another predicate on field.
+
+The following code example demonstrates how to find all entities exclude specific value in field.
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @Not
+    private String name;
+}
+```
+
 ## Debug
 
 You may turn on additional logging to debug created predicates:
