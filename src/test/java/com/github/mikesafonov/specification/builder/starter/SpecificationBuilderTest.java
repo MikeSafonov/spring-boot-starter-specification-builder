@@ -390,4 +390,17 @@ class SpecificationBuilderTest {
         }
 
     }
+
+    @Nested
+    class Not extends BaseTest {
+
+        @Test
+        void shouldReturnCarsExcludeId() {
+            ExcludeIdCarFilter filter = new ExcludeIdCarFilter(1);
+
+            List<CarEntity> cars = carRepository.findAll(specificationBuilder.buildSpecification(filter));
+            assertEquals(2, cars.size());
+            assertThat(cars).extracting("id").containsOnly(2, 3);
+        }
+    }
 }
