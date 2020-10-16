@@ -39,7 +39,7 @@ dependencies {
     implementation ("org.slf4j:slf4j-api")
     implementation ("org.apache.commons:commons-lang3")
 
-    compileOnly ("org.projectlombok:lombok:1.18.10")
+    compileOnly ("org.projectlombok:lombok:1.18.16")
     annotationProcessor ("org.projectlombok:lombok:1.18.10")
 
     testCompileOnly ("org.projectlombok:lombok:1.18.10")
