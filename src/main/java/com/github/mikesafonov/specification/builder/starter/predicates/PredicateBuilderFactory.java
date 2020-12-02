@@ -52,18 +52,21 @@ public class PredicateBuilderFactory {
             );
         }
 
-        PredicateBuilder predicateBuilder =
-                getSimplePredicateBuilder(cb, field, expressionBuilder.getExpression(root, field));
-
-        if (field.isAnnotatedBy(Not.class)) {
-            return new NotPredicateBuilder(cb, predicateBuilder);
-        }
-
-        return predicateBuilder;
+        return getSimplePredicateBuilder(cb, field, expressionBuilder.getExpression(root, field));
     }
 
-    private SimplePredicateBuilder getSimplePredicateBuilder(CriteriaBuilder cb,
+    private PredicateBuilder getSimplePredicateBuilder(CriteriaBuilder cb,
                                                              FieldWithValue field, Expression expression) {
+
+        SimplePredicateBuilder builder = createBuilder(cb, field, expression);
+        if (field.isAnnotatedBy(Not.class)) {
+            return new NotPredicateBuilder(cb, builder);
+        }
+        return builder;
+    }
+
+    private SimplePredicateBuilder createBuilder(CriteriaBuilder cb, FieldWithValue field,
+                                                             Expression expression){
         if (field.isAnnotatedBy(IsNull.class)) {
             return new NullPredicateBuilder(cb, expression);
         }
