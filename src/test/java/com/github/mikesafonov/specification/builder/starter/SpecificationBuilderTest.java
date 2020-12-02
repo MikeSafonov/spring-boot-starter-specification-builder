@@ -8,10 +8,14 @@ import com.github.mikesafonov.specification.builder.starter.base.studens.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.system.CapturedOutput;
+import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.context.jdbc.Sql;
 
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +33,7 @@ class SpecificationBuilderTest {
 
     @DataJpaTest
     @Sql("/init.sql")
+    @ExtendWith(OutputCaptureExtension.class)
     abstract class BaseTest {
 
         @Autowired
@@ -39,6 +44,8 @@ class SpecificationBuilderTest {
         StudentRepository studentRepository;
         @Autowired
         PersonRepository personRepository;
+        @Autowired
+        DataSource dataSource;
 
         SpecificationBuilder specificationBuilder;
 
@@ -86,6 +93,25 @@ class SpecificationBuilderTest {
                     assertThat(carModel.getName()).isEqualTo("audi");
                 });
             });
+        }
+
+        @Test
+        void shouldJoinWithTableOnlyOnce(CapturedOutput capturedOutput) {
+            ModelCarFilter carFilter = new ModelCarFilter();
+            carFilter.setModel("audi");
+            carFilter.setName("audi");
+            List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(carFilter));
+            assertEquals(1, data.size());
+            assertThat(data.get(0)).satisfies(carEntity -> {
+                assertThat(carEntity.getId()).isEqualTo(1);
+                assertThat(carEntity.getNumber()).isEqualTo("123");
+                assertThat(carEntity.getModel()).satisfies(carModel -> {
+                    assertThat(carModel.getId()).isEqualTo(1);
+                    assertThat(carModel.getName()).isEqualTo("audi");
+                });
+            });
+
+            assertThat(capturedOutput).containsOnlyOnce("inner join car_models");
         }
     }
 

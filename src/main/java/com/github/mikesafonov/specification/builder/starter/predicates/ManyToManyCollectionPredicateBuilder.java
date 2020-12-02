@@ -34,7 +34,7 @@ public class ManyToManyCollectionPredicateBuilder<T> implements PredicateBuilder
             Subquery<T> sq = cq.subquery((Class<T>) root.getJavaType());
             Root<T> project = sq.from((Class<T>) root.getJavaType());
 
-            Expression<T> expr = expressionBuilder.getExpression(project, field, cb.equal(project, root));
+            Expression<T> expr = expressionBuilder.getExpressionForSubquery(project, field, cb.equal(project, root));
             sq.select(project).where(cb.equal(expr, filter));
             predicates.add(cb.exists(sq));
         }

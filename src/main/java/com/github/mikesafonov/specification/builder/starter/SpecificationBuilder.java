@@ -25,15 +25,14 @@ public class SpecificationBuilder {
 
     private static final String SERIAL_VERSION_UID_NAME = "serialVersionUID";
 
-    private final PredicateBuilderFactory factory = new PredicateBuilderFactory();
-
     public <F, S> Specification<S> buildSpecification(@NonNull F filter) {
         List<Field> fields = Utils.getFields(filter);
         log.trace("SB-Filter:  " + filter);
+        PredicateBuilderFactory factory = new PredicateBuilderFactory();
         return (root, query, cb) -> {
             Predicate[] predicates = fields.stream()
                 .filter(this::isFieldSupported)
-                .map(field -> toPredicate(field, root, cb, query, filter))
+                .map(field -> toPredicate(factory, field, root, cb, query, filter))
                 .filter(Objects::nonNull)
                 .peek(predicate -> log.trace("SB-Predicate: " + predicate.toString()))
                 .toArray(Predicate[]::new);
@@ -46,7 +45,8 @@ public class SpecificationBuilder {
     }
 
     @Nullable
-    private <F, S> Predicate toPredicate(@NonNull Field field,
+    private <F, S> Predicate toPredicate(@NonNull PredicateBuilderFactory factory,
+                                         @NonNull Field field,
                                          @NonNull Root<S> root,
                                          @NonNull CriteriaBuilder cb,
                                          @NonNull CriteriaQuery<?> cq,
@@ -54,13 +54,14 @@ public class SpecificationBuilder {
         Object fieldValue = Utils.getFieldValue(field, filter);
         if (Utils.isNotNullAndNotBlank(fieldValue) || field.isAnnotationPresent(IsNull.class)
             || field.isAnnotationPresent(com.github.mikesafonov.specification.builder.starter.annotations.NonNull.class)) {
-            return toPredicate(root, cb, cq, new FieldWithValue(field, fieldValue));
+            return toPredicate(factory, root, cb, cq, new FieldWithValue(field, fieldValue));
         }
         return null;
     }
 
     @NonNull
-    private <S> Predicate toPredicate(@NonNull Root<S> root, @NonNull CriteriaBuilder cb,
+    private <S> Predicate toPredicate(@NonNull PredicateBuilderFactory factory,
+                                      @NonNull Root<S> root, @NonNull CriteriaBuilder cb,
                                       @NonNull CriteriaQuery<?> cq, @NonNull FieldWithValue field) {
         return factory.createPredicateBuilder(root, cb, cq, field).build();
     }
