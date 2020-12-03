@@ -44,11 +44,10 @@ class Utils {
      *
      * @param field field of {@code filter}
      * @param filter
-     * @param <F> filter class
      * @return
      */
     @Nullable
-    static <F> Object getFieldValue(@NonNull Field field, @NonNull F filter) {
+    static Object getFieldValue(@NonNull Field field, @NonNull Object filter) {
         try {
             return FieldUtils.readField(field, filter, true);
         } catch (IllegalAccessException e) {
@@ -63,7 +62,7 @@ class Utils {
      * @return all <b>non synthetic</b> fields of the given class and its parents
      */
     @NonNull
-    static <F> List<Field> getFields(@NonNull F filter) {
+    static List<Field> getFields(@NonNull Object filter) {
         return Arrays.stream(FieldUtils.getAllFields(filter.getClass()))
                 .filter(field -> !field.isSynthetic())
                 .collect(toList());

@@ -120,7 +120,7 @@ class SpecificationBuilderTest {
             ModelCarFilter carFilter = new ModelCarFilter();
             carFilter.setModel("audi");
             carFilter.setName("audi");
-            Pageable pageable = PageRequest.of(0, 10);
+            Pageable pageable = PageRequest.of(0, 1);
             Page<CarEntity> page = carRepository.findAll(specificationBuilder.buildSpecification(carFilter), pageable);
             List<CarEntity> data = page.getContent();
             assertEquals(1, data.size());
@@ -133,7 +133,9 @@ class SpecificationBuilderTest {
                 });
             });
 
-            assertThat(capturedOutput).containsOnlyOnce("inner join car_models");
+            assertThat(capturedOutput)
+                .containsOnlyOnce("select carentity0_.id as id1_1_, carentity0_.cost_from as cost_fro2_1_, carentity0_.cost_to as cost_to3_1_, carentity0_.id_model as id_model5_1_, carentity0_.number as number4_1_ from cars carentity0_ inner join car_models carmodel1_ on carentity0_.id_model=carmodel1_.id where carmodel1_.name=? and carmodel1_.name=? limit ?")
+                .containsOnlyOnce("select count(carentity0_.id) as col_0_0_ from cars carentity0_ inner join car_models carmodel1_ on carentity0_.id_model=carmodel1_.id where carmodel1_.name=? and carmodel1_.name=?");
         }
 
         @Test
