@@ -28,8 +28,8 @@ public class SpecificationBuilder {
     public <F, S> Specification<S> buildSpecification(@NonNull F filter) {
         List<Field> fields = Utils.getFields(filter);
         log.trace("SB-Filter:  " + filter);
-        PredicateBuilderFactory factory = new PredicateBuilderFactory();
         return (root, query, cb) -> {
+            PredicateBuilderFactory factory = new PredicateBuilderFactory();
             Predicate[] predicates = fields.stream()
                 .filter(this::isFieldSupported)
                 .map(field -> toPredicate(factory, field, root, cb, query, filter))

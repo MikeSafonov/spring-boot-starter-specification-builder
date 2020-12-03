@@ -13,9 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.jdbc.Sql;
 
-import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,8 +47,6 @@ class SpecificationBuilderTest {
         StudentRepository studentRepository;
         @Autowired
         PersonRepository personRepository;
-        @Autowired
-        DataSource dataSource;
 
         SpecificationBuilder specificationBuilder;
 
@@ -101,6 +102,49 @@ class SpecificationBuilderTest {
             carFilter.setModel("audi");
             carFilter.setName("audi");
             List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(carFilter));
+            assertEquals(1, data.size());
+            assertThat(data.get(0)).satisfies(carEntity -> {
+                assertThat(carEntity.getId()).isEqualTo(1);
+                assertThat(carEntity.getNumber()).isEqualTo("123");
+                assertThat(carEntity.getModel()).satisfies(carModel -> {
+                    assertThat(carModel.getId()).isEqualTo(1);
+                    assertThat(carModel.getName()).isEqualTo("audi");
+                });
+            });
+
+            assertThat(capturedOutput).containsOnlyOnce("inner join car_models");
+        }
+
+        @Test
+        void shouldJoinWithTableOnlyOnceWithPageable(CapturedOutput capturedOutput) {
+            ModelCarFilter carFilter = new ModelCarFilter();
+            carFilter.setModel("audi");
+            carFilter.setName("audi");
+            Pageable pageable = PageRequest.of(0, 10);
+            Page<CarEntity> page = carRepository.findAll(specificationBuilder.buildSpecification(carFilter), pageable);
+            List<CarEntity> data = page.getContent();
+            assertEquals(1, data.size());
+            assertThat(data.get(0)).satisfies(carEntity -> {
+                assertThat(carEntity.getId()).isEqualTo(1);
+                assertThat(carEntity.getNumber()).isEqualTo("123");
+                assertThat(carEntity.getModel()).satisfies(carModel -> {
+                    assertThat(carModel.getId()).isEqualTo(1);
+                    assertThat(carModel.getName()).isEqualTo("audi");
+                });
+            });
+
+            assertThat(capturedOutput).containsOnlyOnce("inner join car_models");
+        }
+
+        @Test
+        void shouldJoinWithTableOnlyOnceWithAndSpecification(CapturedOutput capturedOutput) {
+            ModelCarFilter carFilter = new ModelCarFilter();
+            carFilter.setModel("audi");
+            carFilter.setName("audi");
+            Specification specification = specificationBuilder.buildSpecification(carFilter)
+                .and((root, q, cb) -> cb.isNotNull(root.get("number")));
+
+            List<CarEntity> data = carRepository.findAll(specification);
             assertEquals(1, data.size());
             assertThat(data.get(0)).satisfies(carEntity -> {
                 assertThat(carEntity.getId()).isEqualTo(1);
@@ -395,7 +439,7 @@ class SpecificationBuilderTest {
         class Joined extends BaseTest {
 
             @Test
-            void shouldFindByNameOrSurname(){
+            void shouldFindByNameOrSurname() {
                 PersonNameOrSurnameFilter filter = new PersonNameOrSurnameFilter();
                 filter.setValue("Jon");
 
@@ -405,7 +449,7 @@ class SpecificationBuilderTest {
             }
 
             @Test
-            void shouldReturnEmpty(){
+            void shouldReturnEmpty() {
                 PersonNameOrSurnameFilter filter = new PersonNameOrSurnameFilter();
                 filter.setValue("Andy");
 
@@ -430,7 +474,7 @@ class SpecificationBuilderTest {
         }
 
         @Test
-        void shouldReturnCarsExcludeIdAndCost(){
+        void shouldReturnCarsExcludeIdAndCost() {
             ExcludeIdAndCostCarFilter filter = new ExcludeIdAndCostCarFilter(1);
 
             List<CarEntity> cars = carRepository.findAll(specificationBuilder.buildSpecification(filter));
