@@ -131,7 +131,7 @@ public class ExpressionBuilder {
 
         Join[] joins = field.getAnnotationsByType(Join.class);
         String key = buildKey(joins);
-        return joinCache.computeIfAbsent(key, s -> buildJoin(joins, root, field, restrictions));
+        return joinCache.computeIfAbsent(key, s -> buildJoin(joins, root, restrictions));
     }
 
     /**
@@ -148,13 +148,12 @@ public class ExpressionBuilder {
                                                               @NonNull Field field,
                                                               @NonNull Predicate... restrictions) {
         Join[] joins = field.getAnnotationsByType(Join.class);
-        return buildJoin(joins, root, field, restrictions);
+        return buildJoin(joins, root, restrictions);
     }
 
     @NonNull
     private <E> javax.persistence.criteria.Join<?, ?> buildJoin(@NonNull Join[] joins,
                                                                 @NonNull Root<E> root,
-                                                                @NonNull Field field,
                                                                 @NonNull Predicate... restrictions) {
         javax.persistence.criteria.Join<?, ?> join = root.join(joins[0].value(), joins[0].type()).on(restrictions);
         for (int i = 1; i < joins.length; i++) {
