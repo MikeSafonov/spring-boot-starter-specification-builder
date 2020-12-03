@@ -1,19 +1,19 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+@RequiredArgsConstructor
 public class NotPredicateBuilder implements PredicateBuilder {
-    private final CriteriaBuilder cb;
+
     private final PredicateBuilder predicateBuilder;
 
-    public NotPredicateBuilder(CriteriaBuilder cb, PredicateBuilder predicateBuilder) {
-        this.cb = cb;
-        this.predicateBuilder = predicateBuilder;
-    }
-
     @Override
-    public Predicate build() {
-        return cb.not(predicateBuilder.build());
+    public Predicate build(Root<?> root, CriteriaQuery<?> q, CriteriaBuilder cb) {
+        return cb.not(predicateBuilder.build(root, q, cb));
     }
 }

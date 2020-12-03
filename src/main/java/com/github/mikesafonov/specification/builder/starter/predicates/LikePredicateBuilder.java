@@ -1,10 +1,10 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
+import com.github.mikesafonov.specification.builder.starter.ExpressionBuilder;
+import com.github.mikesafonov.specification.builder.starter.FieldWithValue;
 import com.github.mikesafonov.specification.builder.starter.annotations.Like;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.*;
 
 /**
  * Builder for {@code like} predicate
@@ -15,22 +15,17 @@ public class LikePredicateBuilder extends SimplePredicateBuilder {
 
     private static final String PERCENT = "%";
 
-    private final CriteriaBuilder cb;
     private final Like like;
-    private final Object fieldValue;
 
-    public LikePredicateBuilder(CriteriaBuilder cb, Like like, Object fieldValue, Expression expression) {
-        super(expression);
-        this.cb = cb;
+    public LikePredicateBuilder(ExpressionBuilder expressionBuilder, FieldWithValue field, Like like) {
+        super(expressionBuilder, field);
         this.like = like;
-        this.fieldValue = fieldValue;
     }
 
-
     @Override
-    public Predicate build() {
+    public Predicate build(Root<?> root, CriteriaQuery<?> q, CriteriaBuilder cb) {
         String searchValue = getSearchValue();
-        Expression<String> expr = expression.as(String.class);
+        Expression<String> expr = getExpression(root).as(String.class);
         if (!like.caseSensitive()) {
             expr = cb.upper(expr);
             searchValue = searchValue.toUpperCase();
@@ -41,11 +36,11 @@ public class LikePredicateBuilder extends SimplePredicateBuilder {
     private String getSearchValue() {
         switch (like.direction()) {
             case LEFT:
-                return PERCENT + fieldValue;
+                return PERCENT + field.getValue();
             case RIGHT:
-                return fieldValue + PERCENT;
+                return field.getValue() + PERCENT;
             default:
-                return PERCENT + fieldValue + PERCENT;
+                return PERCENT + field.getValue() + PERCENT;
         }
     }
 }

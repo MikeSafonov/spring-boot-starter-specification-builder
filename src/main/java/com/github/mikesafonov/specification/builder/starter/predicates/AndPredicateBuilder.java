@@ -1,10 +1,13 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
+import com.github.mikesafonov.specification.builder.starter.FieldWithValue;
+import com.github.mikesafonov.specification.builder.starter.annotations.Names;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.Arrays;
 import java.util.function.Function;
 
@@ -14,17 +17,17 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class AndPredicateBuilder implements PredicateBuilder {
 
-    private final CriteriaBuilder cb;
-    private final Expression[] expressions;
-    private final Function<Expression, PredicateBuilder> predicateBuilderFunction;
+    private final FieldWithValue field;
+    private final Function<FieldWithValue, PredicateBuilder> predicateBuilderFunction;
 
     @Override
-    public Predicate build() {
-        Predicate[] predicates = Arrays.stream(expressions)
+    public Predicate build(Root<?> root, CriteriaQuery<?> q, CriteriaBuilder cb) {
+        Names names = field.getAnnotation(Names.class);
+        Predicate[] predicates = Arrays.stream(names.value())
+            .map(s -> new FieldWithValue(field, s))
             .map(predicateBuilderFunction)
-            .map(PredicateBuilder::build)
+            .map(builder -> builder.build(root, q, cb))
             .toArray(Predicate[]::new);
         return cb.and(predicates);
     }
-
 }

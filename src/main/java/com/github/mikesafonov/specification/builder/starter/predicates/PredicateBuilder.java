@@ -2,7 +2,10 @@ package com.github.mikesafonov.specification.builder.starter.predicates;
 
 import org.springframework.lang.NonNull;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 /**
  * Extension for building specific {@link Predicate}
@@ -16,5 +19,5 @@ public interface PredicateBuilder {
      *
      * @return {@link Predicate}
      */
-    @NonNull Predicate build();
+    @NonNull Predicate build(Root<?> root, CriteriaQuery<?> q, CriteriaBuilder cb);
 }

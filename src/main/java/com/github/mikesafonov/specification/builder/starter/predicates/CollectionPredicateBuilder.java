@@ -1,8 +1,12 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
-import javax.persistence.criteria.Expression;
+import com.github.mikesafonov.specification.builder.starter.ExpressionBuilder;
+import com.github.mikesafonov.specification.builder.starter.FieldWithValue;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import java.util.Collection;
+import javax.persistence.criteria.Root;
 
 /**
  * Builder for collection {@code in} predicate
@@ -10,15 +14,13 @@ import java.util.Collection;
  * @author MikeSafonov
  */
 public class CollectionPredicateBuilder extends SimplePredicateBuilder {
-    private final Collection fieldValue;
 
-    public CollectionPredicateBuilder(Collection fieldValue, Expression expression) {
-        super(expression);
-        this.fieldValue = fieldValue;
+    public CollectionPredicateBuilder(ExpressionBuilder expressionBuilder, FieldWithValue field) {
+        super(expressionBuilder, field);
     }
 
     @Override
-    public Predicate build() {
-        return expression.in(fieldValue);
+    public Predicate build(Root<?> root, CriteriaQuery<?> q, CriteriaBuilder cb) {
+        return getExpression(root).in(field.getValueAsCollection());
     }
 }

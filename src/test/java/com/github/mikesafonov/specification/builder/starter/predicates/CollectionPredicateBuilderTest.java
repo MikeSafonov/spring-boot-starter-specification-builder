@@ -1,29 +1,30 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.criteria.Expression;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  *
  * @author MikeSafonov
  */
-class CollectionPredicateBuilderTest {
+class CollectionPredicateBuilderTest extends BasePredicateTest {
+
+    private CollectionPredicateBuilder builder;
+
+    @BeforeEach
+    void setUpBuilder() {
+        builder = new CollectionPredicateBuilder(expressionBuilder, fieldWithValue);
+    }
+
     @Test
-    void shouldCallInOnExpression() {
-        List<String> stringList = new ArrayList<>();
-        stringList.add("Some string");
-        Expression expression = mock(Expression.class);
-        CollectionPredicateBuilder builder = new CollectionPredicateBuilder(stringList, expression);
+    void shouldCallEqualsOnExpression() {
 
+        builder.build(root, criteriaQuery, cb);
 
-        builder.build();
-
-        verify(expression).in(stringList);
+        verify(expression).in(fieldWithValue.getValueAsCollection());
         verifyNoMoreInteractions(expression);
     }
 }

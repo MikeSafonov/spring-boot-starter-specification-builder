@@ -16,15 +16,33 @@ public class FieldWithValue {
 
     private Field field;
     private Object value;
+    private String name;
 
-
-    public String getFieldName() {
-        return field.isAnnotationPresent(Name.class)
+    public FieldWithValue(Field field, Object value) {
+        this.field = field;
+        this.value = value;
+        name = field.isAnnotationPresent(Name.class)
             ? field.getAnnotation(Name.class).value()
             : field.getName();
     }
 
-    public boolean isAnnotatedBy(Class<? extends Annotation> annotationClass){
+    public FieldWithValue(FieldWithValue fieldWithValue, String name) {
+        this.field = fieldWithValue.field;
+        this.value = fieldWithValue.value;
+        this.name = name;
+    }
+
+    public FieldWithValue(Field field, Object value, String name) {
+        this.field = field;
+        this.value = value;
+        this.name = name;
+    }
+
+    public String getFieldName() {
+        return name;
+    }
+
+    public boolean isAnnotatedBy(Class<? extends Annotation> annotationClass) {
         return field.isAnnotationPresent(annotationClass);
     }
 
@@ -32,20 +50,20 @@ public class FieldWithValue {
         return field.getAnnotation(annotationClass);
     }
 
-    public boolean isValueCollection(){
+    public boolean isValueCollection() {
         return Collection.class.isAssignableFrom(value.getClass());
     }
 
-    public Collection getValueAsCollection(){
+    public Collection getValueAsCollection() {
         return (Collection) value;
     }
 
-    public boolean isValueSegmentFilter(){
+    public boolean isValueSegmentFilter() {
         return SegmentFilter.class.isAssignableFrom(value.getClass());
     }
 
-    public SegmentFilter<?> getValueAsSegmentFilter(){
-        return (SegmentFilter<?>) value;
+    public <T> SegmentFilter<T> getValueAsSegmentFilter() {
+        return (SegmentFilter<T>) value;
     }
 
 }

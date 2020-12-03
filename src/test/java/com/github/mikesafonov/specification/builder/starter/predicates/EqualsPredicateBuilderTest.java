@@ -1,27 +1,29 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
- *
  * @author MikeSafonov
  */
-class EqualsPredicateBuilderTest {
+class EqualsPredicateBuilderTest extends BasePredicateTest {
+
+    private EqualsPredicateBuilder builder;
+
+    @BeforeEach
+    void setUpBuilder() {
+        builder = new EqualsPredicateBuilder(expressionBuilder, fieldWithValue);
+    }
+
     @Test
-    void shouldCallEqualsOnExpression(){
-        CriteriaBuilder cb = mock(CriteriaBuilder.class);
-        Object value = "Some value";
-        Expression expression = mock(Expression.class);
-        EqualsPredicateBuilder builder = new EqualsPredicateBuilder(cb, value, expression);
+    void shouldCallEqualsOnExpression() {
 
-        builder.build();
+        builder.build(root, criteriaQuery, cb);
 
-        verify(cb).equal(expression, value);
+        verify(cb).equal(expression, fieldWithValue.getValue());
         verifyNoMoreInteractions(expression);
     }
 }

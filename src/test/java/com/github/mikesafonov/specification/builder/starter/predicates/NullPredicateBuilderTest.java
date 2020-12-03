@@ -1,24 +1,27 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  *
  * @author MikeSafonov
  */
-class NullPredicateBuilderTest {
+class NullPredicateBuilderTest extends BasePredicateTest {
+    private NullPredicateBuilder builder;
+
+    @BeforeEach
+    void setUpBuilder() {
+        builder = new NullPredicateBuilder(expressionBuilder, fieldWithValue);
+    }
+
+
     @Test
     void shouldCallIsNull(){
-        CriteriaBuilder cb = mock(CriteriaBuilder.class);
-        Expression expression = mock(Expression.class);
-        NullPredicateBuilder builder = new NullPredicateBuilder(cb, expression);
-
-        builder.build();
+        builder.build(root, criteriaQuery, cb);
 
         verify(cb).isNull(expression);
         verifyNoMoreInteractions(expression);

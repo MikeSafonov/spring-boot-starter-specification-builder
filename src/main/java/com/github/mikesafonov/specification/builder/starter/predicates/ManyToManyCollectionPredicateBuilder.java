@@ -20,14 +20,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ManyToManyCollectionPredicateBuilder<T> implements PredicateBuilder {
 
-    private final Root<T> root;
-    private final CriteriaBuilder cb;
-    private final CriteriaQuery<?> cq;
-    private final FieldWithValue field;
     private final ExpressionBuilder expressionBuilder;
+    private final FieldWithValue field;
+
 
     @Override
-    public Predicate build() {
+    public Predicate build(Root<?> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
         Collection collection = field.getValueAsCollection();
         List<Predicate> predicates = new ArrayList<>();
         for (Object filter : collection) {

@@ -3,6 +3,8 @@ package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Ignore;
 import com.github.mikesafonov.specification.builder.starter.annotations.IsNull;
+import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilder;
+import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilderFactory;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -22,13 +24,15 @@ public class SpecificationBuilder {
 
     public <F, S> Specification<S> buildSpecification(@NonNull F filter) {
         Objects.requireNonNull(filter);
-        List<FieldWithValue> fieldsForPredicate = Utils.getFields(filter).stream()
+        PredicateBuilderFactory factory = new PredicateBuilderFactory();
+        List<PredicateBuilder> predicateBuilders = Utils.getFields(filter).stream()
             .filter(this::isFieldSupported)
             .map(field -> toFieldWithValue(field, filter))
             .filter(Objects::nonNull)
+            .map(factory::createPredicateBuilder)
             .collect(toList());
 
-        return new SelfBuildSpecification<>(fieldsForPredicate);
+        return new SelfBuildSpecification<>(predicateBuilders);
     }
 
     private boolean isFieldSupported(@NonNull Field field) {

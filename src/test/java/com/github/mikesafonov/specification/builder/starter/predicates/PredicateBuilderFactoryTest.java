@@ -6,14 +6,10 @@ import com.github.mikesafonov.specification.builder.starter.type.SegmentFilter;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 /**
  * @author MikeSafonov
@@ -23,14 +19,11 @@ class PredicateBuilderFactoryTest {
     @Test
     @SneakyThrows
     void shouldReturnCollectionPredicateBuilder() {
-        CriteriaBuilder cb = mock(CriteriaBuilder.class);
-
         String fieldName = "collection";
         Field field = CarFilter.class.getDeclaredField(fieldName);
         Object value = new ArrayList<>();
-        Root root = mock(Root.class);
-        CriteriaQuery cq = mock(CriteriaQuery.class);
-        PredicateBuilder builder = new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, new FieldWithValue(field, value));
+        PredicateBuilder builder = new PredicateBuilderFactory()
+            .createPredicateBuilder(new FieldWithValue(field, value));
 
         assertThat(builder).isInstanceOf(CollectionPredicateBuilder.class);
     }
@@ -103,11 +96,7 @@ class PredicateBuilderFactoryTest {
 
     @SneakyThrows
     private PredicateBuilder createBuilderForField(String fieldName, Object value) {
-        CriteriaBuilder cb = mock(CriteriaBuilder.class);
-        Root root = mock(Root.class);
-        CriteriaQuery cq = mock(CriteriaQuery.class);
-
         Field field = CarFilter.class.getDeclaredField(fieldName);
-        return new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, new FieldWithValue(field, value));
+        return new PredicateBuilderFactory().createPredicateBuilder(new FieldWithValue(field, value));
     }
 }

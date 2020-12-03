@@ -1,6 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter;
 
-import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilderFactory;
+import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,13 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SelfBuildSpecification<S> implements Specification<S> {
 
-    private final List<FieldWithValue> fieldsForPredicate;
-
+    private final List<PredicateBuilder> predicateBuilders;
     @Override
     public Predicate toPredicate(Root<S> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-        PredicateBuilderFactory factory = new PredicateBuilderFactory();
-        Predicate[] predicates = fieldsForPredicate.stream()
-            .map(field -> factory.createPredicateBuilder(root, cb, query, field).build())
+        Predicate[] predicates = predicateBuilders.stream()
+            .map(builder -> builder.build(root, query, cb))
             .toArray(Predicate[]::new);
         return cb.and(predicates);
     }
