@@ -10,16 +10,12 @@ import javax.persistence.*;
  */
 @Data
 @Entity
-@Table(name = "car_models")
-public class CarModel {
+@Table(name = "car_types")
+public class CarType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "id_type")
-    private CarType type;
+    @Column(name = "type")
+    private String type;
 }

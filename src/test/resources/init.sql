@@ -1,15 +1,19 @@
 DELETE FROM cars;
 DELETE FROM car_models;
+DELETE FROM car_types;
 DELETE FROM students_classes;
 DELETE FROM students;
 DELETE FROM classes;
 DELETE FROM persons;
 DELETE FROM person_infos;
 
-insert into car_models(id, name)
-values (1, 'audi'),
-       (2, 'volvo'),
-       (3, null);
+insert into car_types(id, type)
+values (1, 'new'), (2, 'old');
+
+insert into car_models(id, name, id_type)
+values (1, 'audi' , 1),
+       (2, 'volvo', 2),
+       (3, null, 1);
 
 insert into cars(id, number, id_model, cost_from, cost_to)
 values (1, '123', 1, 10, 50),

@@ -97,6 +97,29 @@ class SpecificationBuilderTest {
         }
 
         @Test
+        void shouldJoinWithTableOnlyOnceWithSeveralJoins(CapturedOutput capturedOutput) {
+            ModelTypeCarFilter carFilter = new ModelTypeCarFilter();
+            carFilter.setModel("audi");
+            carFilter.setType("new");
+            List<CarEntity> data = carRepository.findAll(specificationBuilder.buildSpecification(carFilter));
+            assertEquals(1, data.size());
+            assertThat(data.get(0)).satisfies(carEntity -> {
+                assertThat(carEntity.getId()).isEqualTo(1);
+                assertThat(carEntity.getNumber()).isEqualTo("123");
+                assertThat(carEntity.getModel()).satisfies(carModel -> {
+                    assertThat(carModel.getId()).isEqualTo(1);
+                    assertThat(carModel.getName()).isEqualTo("audi");
+                    assertThat(carModel.getType()).satisfies(carType -> {
+                        assertThat(carType.getType()).isEqualTo("new");
+                        assertThat(carType.getId()).isEqualTo(1);
+                    });
+                });
+            });
+
+            assertThat(capturedOutput).containsOnlyOnce("inner join car_models");
+        }
+
+        @Test
         void shouldJoinWithTableOnlyOnce(CapturedOutput capturedOutput) {
             ModelCarFilter carFilter = new ModelCarFilter();
             carFilter.setModel("audi");
@@ -134,7 +157,7 @@ class SpecificationBuilderTest {
             });
 
             assertThat(capturedOutput)
-                .containsOnlyOnce("select carentity0_.id as id1_1_, carentity0_.cost_from as cost_fro2_1_, carentity0_.cost_to as cost_to3_1_, carentity0_.id_model as id_model5_1_, carentity0_.number as number4_1_ from cars carentity0_ inner join car_models carmodel1_ on carentity0_.id_model=carmodel1_.id where carmodel1_.name=? and carmodel1_.name=? limit ?")
+                .containsOnlyOnce("select carentity0_.id as id1_2_, carentity0_.cost_from as cost_fro2_2_, carentity0_.cost_to as cost_to3_2_, carentity0_.id_model as id_model5_2_, carentity0_.number as number4_2_ from cars carentity0_ inner join car_models carmodel1_ on carentity0_.id_model=carmodel1_.id where carmodel1_.name=? and carmodel1_.name=? limit ?")
                 .containsOnlyOnce("select count(carentity0_.id) as col_0_0_ from cars carentity0_ inner join car_models carmodel1_ on carentity0_.id_model=carmodel1_.id where carmodel1_.name=? and carmodel1_.name=?");
         }
 

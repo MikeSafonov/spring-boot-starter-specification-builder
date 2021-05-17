@@ -9,16 +9,20 @@ import javax.persistence.criteria.From;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.singletonList;
 
 /**
  * @author MikeSafonov
  */
 public class ExpressionBuilder {
 
+    private final JoinBuilder joinBuilder = new JoinBuilder();
     private final Map<String, javax.persistence.criteria.Join<?, ?>> joinCache = new HashMap<>();
 
     /**
@@ -106,8 +110,8 @@ public class ExpressionBuilder {
      * @return {@link From} for building expression
      */
     private <E> From<?, ?> getFrom(@NonNull Root<E> root,
-                                         @NonNull Field field,
-                                         @NonNull Predicate... restrictions) {
+                                   @NonNull Field field,
+                                   @NonNull Predicate... restrictions) {
         if (field.isAnnotationPresent(Join.class) || field.isAnnotationPresent(Joins.class)) {
             return getJoin(root, field, restrictions);
         }
@@ -130,8 +134,19 @@ public class ExpressionBuilder {
                                                                     @NonNull Predicate... restrictions) {
 
         Join[] joins = field.getAnnotationsByType(Join.class);
-        String key = buildKey(joins);
-        return joinCache.computeIfAbsent(key, s -> buildJoin(joins, root, restrictions));
+        String rootKey = buildKey(singletonList(joins[0]));
+        javax.persistence.criteria.Join<?, ?> currentJoin =
+            joinCache.computeIfAbsent(rootKey, s -> joinBuilder.buildRootJoin(joins[0], root, restrictions));
+        List<Join> processedJoins = new ArrayList<>();
+        processedJoins.add(joins[0]);
+        for (int i = 1; i < joins.length; i++) {
+            final int index = i;
+            final javax.persistence.criteria.Join<?, ?> tmpCurrentJoin = currentJoin;
+            processedJoins.add(joins[i]);
+            String key = buildKey(processedJoins);
+            currentJoin = joinCache.computeIfAbsent(key, s -> joinBuilder.buildJoin(joins[index], tmpCurrentJoin));
+        }
+        return currentJoin;
     }
 
     /**
@@ -148,22 +163,11 @@ public class ExpressionBuilder {
                                                               @NonNull Field field,
                                                               @NonNull Predicate... restrictions) {
         Join[] joins = field.getAnnotationsByType(Join.class);
-        return buildJoin(joins, root, restrictions);
+        return joinBuilder.buildAllJoins(joins, root, restrictions);
     }
 
-    @NonNull
-    private <E> javax.persistence.criteria.Join<?, ?> buildJoin(@NonNull Join[] joins,
-                                                                @NonNull Root<E> root,
-                                                                @NonNull Predicate... restrictions) {
-        javax.persistence.criteria.Join<?, ?> join = root.join(joins[0].value(), joins[0].type()).on(restrictions);
-        for (int i = 1; i < joins.length; i++) {
-            join = join.join(joins[i].value(), joins[i].type());
-        }
-        return join;
-    }
-
-    private String buildKey(Join[] joins) {
-        return Arrays.stream(joins)
+    private String buildKey(List<Join> joins) {
+        return joins.stream()
             .map(join -> join.value() + "(" + join.type() + ")")
             .collect(Collectors.joining("."));
     }
