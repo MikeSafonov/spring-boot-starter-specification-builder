@@ -150,6 +150,7 @@ pitest {
 sonarqube {
     properties {
         property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.organization', 'mikesafonov-github'
         property 'sonar.projectKey', 'MikeSafonov_spring-boot-starter-specification-builder'
         property 'sonar.projectName', 'spring-boot-starter-specification-builder'
         property 'sonar.projectVersion', '1.7.0'
