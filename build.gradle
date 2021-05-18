@@ -145,3 +145,22 @@ pitest {
     historyInputLocation = ".pitest/pitHistory.txt"
     historyOutputLocation = ".pitest/pitHistory.txt"
 }
+
+
+sonarqube {
+    properties {
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.projectKey', 'MikeSafonov_spring-boot-starter-specification-builder'
+        property 'sonar.projectName', 'spring-boot-starter-specification-builder'
+        property 'sonar.projectVersion', '1.7.0'
+        property 'sonar.sources', 'src/main'
+        property 'sonar.tests', 'src/test'
+        property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+        property 'sonar.exclusions', '**/main/resources/**'
+        property 'sonar.java.binaries', 'build/classes'
+        property 'sonar.links.homepage', 'https://github.com/MikeSafonov/spring-boot-starter-specification-builder'
+        property 'sonar.links.ci', 'https://github.com/MikeSafonov/spring-boot-starter-specification-builder'
+        property 'sonar.links.scm', 'https://github.com/MikeSafonov/spring-boot-starter-specification-builder'
+        property 'sonar.links.issue', 'https://github.com/MikeSafonov/spring-boot-starter-specification-builder/issues'
+    }
+}
