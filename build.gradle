@@ -13,7 +13,7 @@ apply plugin: "signing"
 ext { springBootVersion = "2.4.4" }
 
 group "com.github.mikesafonov"
-version "1.7.0"
+version "1.8.0"
 
 sourceCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = "UTF-8"
@@ -153,7 +153,7 @@ sonarqube {
         property 'sonar.organization', 'mikesafonov-github'
         property 'sonar.projectKey', 'MikeSafonov_spring-boot-starter-specification-builder'
         property 'sonar.projectName', 'spring-boot-starter-specification-builder'
-        property 'sonar.projectVersion', '1.7.0'
+        property 'sonar.projectVersion', '1.8.0'
         property 'sonar.sources', 'src/main'
         property 'sonar.tests', 'src/test'
         property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
