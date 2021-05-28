@@ -1,6 +1,9 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.base.cars.*;
+import com.github.mikesafonov.specification.builder.starter.base.clients.ClientContractNumberFilter;
+import com.github.mikesafonov.specification.builder.starter.base.clients.ClientEntity;
+import com.github.mikesafonov.specification.builder.starter.base.clients.ClientRepository;
 import com.github.mikesafonov.specification.builder.starter.base.persons.PersonEntity;
 import com.github.mikesafonov.specification.builder.starter.base.persons.PersonNameOrSurnameFilter;
 import com.github.mikesafonov.specification.builder.starter.base.persons.PersonRepository;
@@ -47,6 +50,8 @@ class SpecificationBuilderTest {
         StudentRepository studentRepository;
         @Autowired
         PersonRepository personRepository;
+        @Autowired
+        ClientRepository clientRepository;
 
         SpecificationBuilder specificationBuilder;
 
@@ -506,5 +511,51 @@ class SpecificationBuilderTest {
             assertEquals(2, cars.size());
             assertThat(cars).extracting("id").containsOnly(2, 3);
         }
+    }
+
+    @Nested
+    class Distinct extends BaseTest {
+
+        @Test
+        void shouldReturnDistinctClients() {
+            ClientContractNumberFilter filter = new ClientContractNumberFilter();
+            filter.setContract("UK");
+
+            List<ClientEntity> clients = clientRepository.findAll(specificationBuilder.buildSpecification(filter));
+            assertEquals(2, clients.size());
+            assertThat(clients.get(0)).satisfies(client -> {
+                assertThat(client.getId()).isEqualTo(1L);
+                assertThat(client.getName()).isEqualTo("client 1");
+                assertThat(client.getContracts()).hasSize(3).satisfies(contracts -> {
+                    assertThat(contracts.get(0).getId()).isEqualTo(1L);
+                    assertThat(contracts.get(0).getNumber()).isEqualTo("UK9999");
+                    assertThat(contracts.get(0).getIdClient()).isEqualTo(1L);
+                    assertThat(contracts.get(1).getId()).isEqualTo(2L);
+                    assertThat(contracts.get(1).getNumber()).isEqualTo("UK8888");
+                    assertThat(contracts.get(1).getIdClient()).isEqualTo(1L);
+                    assertThat(contracts.get(2).getId()).isEqualTo(3L);
+                    assertThat(contracts.get(2).getNumber()).isEqualTo("UG129");
+                    assertThat(contracts.get(2).getIdClient()).isEqualTo(1L);
+                });
+            });
+            assertThat(clients.get(1)).satisfies(client -> {
+                assertThat(client.getId()).isEqualTo(2L);
+                assertThat(client.getName()).isEqualTo("client 2");
+                assertThat(client.getContracts()).hasSize(3).satisfies(contracts -> {
+                    assertThat(contracts.get(0).getId()).isEqualTo(4L);
+                    assertThat(contracts.get(0).getNumber()).isEqualTo("UK1119");
+                    assertThat(contracts.get(0).getIdClient()).isEqualTo(2L);
+                    assertThat(contracts.get(1).getId()).isEqualTo(5L);
+                    assertThat(contracts.get(1).getNumber()).isEqualTo("UG3339");
+                    assertThat(contracts.get(1).getIdClient()).isEqualTo(2L);
+                    assertThat(contracts.get(2).getId()).isEqualTo(6L);
+                    assertThat(contracts.get(2).getNumber()).isEqualTo("UK4339");
+                    assertThat(contracts.get(2).getIdClient()).isEqualTo(2L);
+                });
+            });
+
+
+        }
+
     }
 }

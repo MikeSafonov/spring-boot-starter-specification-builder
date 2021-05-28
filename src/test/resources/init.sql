@@ -6,6 +6,9 @@ DELETE FROM students;
 DELETE FROM classes;
 DELETE FROM persons;
 DELETE FROM person_infos;
+DELETE FROM clients;
+DELETE FROM contracts;
+
 
 insert into car_types(id, type)
 values (1, 'new'), (2, 'old');
@@ -42,3 +45,12 @@ insert into persons(id) values (1), (2), (3);
 insert into person_infos(id, name, surname, id_person) values
 (1, 'Jon','Doe',1), (2, 'Mike','Jonson',2), (3, 'Jenkins','Jenkinson',3);
 
+
+insert into clients(id, name) values (1, 'client 1'), (2, 'client 2'), (3, 'client 3');
+insert into contracts(id, number, id_client) values
+                                                (1, 'UK9999', 1),
+                                                (2, 'UK8888', 1),
+                                                (3, 'UG129', 1),
+                                                (4, 'UK1119', 2),
+                                                (5, 'UG3339', 2),
+                                                (6, 'UK4339', 2);

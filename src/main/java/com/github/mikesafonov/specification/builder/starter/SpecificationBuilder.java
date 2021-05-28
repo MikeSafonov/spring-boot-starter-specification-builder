@@ -1,6 +1,7 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 
+import com.github.mikesafonov.specification.builder.starter.annotations.Distinct;
 import com.github.mikesafonov.specification.builder.starter.annotations.Ignore;
 import com.github.mikesafonov.specification.builder.starter.annotations.IsNull;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,7 +29,7 @@ public class SpecificationBuilder {
             .filter(Objects::nonNull)
             .collect(toList());
 
-        return new SelfBuildSpecification<>(fieldsForPredicate);
+        return new SelfBuildSpecification<>(fieldsForPredicate, useDistinct(filter.getClass()));
     }
 
     private boolean isFieldSupported(@NonNull Field field) {
@@ -43,5 +44,10 @@ public class SpecificationBuilder {
             return new FieldWithValue(field, fieldValue);
         }
         return null;
+    }
+
+    private boolean useDistinct(@NonNull Class<?> filterClass) {
+        Distinct distinct = filterClass.getAnnotation(Distinct.class);
+        return distinct != null;
     }
 }

@@ -19,10 +19,16 @@ import java.util.List;
 public class SelfBuildSpecification<S> implements Specification<S> {
 
     private final List<FieldWithValue> fieldsForPredicate;
+    private final boolean useDistinct;
+
+    public SelfBuildSpecification(List<FieldWithValue> fieldsForPredicate) {
+        this(fieldsForPredicate, false);
+    }
 
     @Override
     public Predicate toPredicate(Root<S> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         PredicateBuilderFactory factory = new PredicateBuilderFactory();
+        query.distinct(useDistinct);
         Predicate[] predicates = fieldsForPredicate.stream()
             .map(field -> factory.createPredicateBuilder(root, cb, query, field).build())
             .toArray(Predicate[]::new);

@@ -499,6 +499,56 @@ public class CarFilter {
     private String name;
 }
 ```
+### Use `Distinct`
+
+Specify whether duplicate query results will be eliminated.
+
+
+Entities:
+```java
+@Entity
+@Table(name = "clients")
+public class ClientEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
+    private String name;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_client")
+    private List<ContractEntity> contracts = new ArrayList<>();
+}
+```
+
+```java
+@Entity
+@Table(name = "contracts")
+public class ContractEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
+    private String number;
+
+    @Column(name = "id_client")
+    private Long idClient;
+}
+```
+
+Filter:
+```java
+@Distinct
+public class ClientContractNumberFilter {
+
+    @Like
+    @Join("contracts")
+    @Name("number")
+    private String contract;
+}
+```
 
 ## Debug
 
