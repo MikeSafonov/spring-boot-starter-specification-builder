@@ -22,9 +22,10 @@ class LikePredicateBuilderTest {
 
     private static Stream<Arguments> directionArguments() {
         return Stream.of(
-                Arguments.of("some value", Like.DIRECTION.AROUND, "%some value%"),
-                Arguments.of("some value", Like.DIRECTION.RIGHT, "some value%"),
-                Arguments.of("some value", Like.DIRECTION.LEFT, "%some value")
+            Arguments.of("some value", Like.DIRECTION.NONE, "some value"),
+            Arguments.of("some value", Like.DIRECTION.AROUND, "%some value%"),
+            Arguments.of("some value", Like.DIRECTION.RIGHT, "some value%"),
+            Arguments.of("some value", Like.DIRECTION.LEFT, "%some value")
         );
     }
 

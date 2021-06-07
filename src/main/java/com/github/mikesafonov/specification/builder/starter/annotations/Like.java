@@ -24,6 +24,6 @@ public @interface Like {
     boolean caseSensitive() default false;
 
     enum DIRECTION {
-        LEFT, RIGHT, AROUND
+        LEFT, RIGHT, AROUND, NONE
     }
 }
