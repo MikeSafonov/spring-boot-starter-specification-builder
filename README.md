@@ -317,12 +317,19 @@ public class CarFilter {
 }
 ```
 
+Also, you can use `@Like` without `%` bounds
+
+```@Like(direction = Like.DIRECTION.NONE)```
+
 ### Using `Join`
 
-The following code example demonstrates how to find all entities with specific field is `equal` to filters value, joined by another field 
+The following code example demonstrates how to find all entities with specific field is `equal` to filters value, joined
+by another field
 
 Entities:
+
 ```java
+
 @Entity
 @Table(name = "car_models")
 public class CarModel {

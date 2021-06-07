@@ -44,6 +44,8 @@ public class LikePredicateBuilder extends SimplePredicateBuilder {
                 return PERCENT + fieldValue;
             case RIGHT:
                 return fieldValue + PERCENT;
+            case NONE:
+                return fieldValue.toString();
             default:
                 return PERCENT + fieldValue + PERCENT;
         }
