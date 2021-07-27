@@ -1,16 +1,14 @@
 package com.github.mikesafonov.specification.builder.starter.predicates;
 
 import com.github.mikesafonov.specification.builder.starter.annotations.Like;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import sun.reflect.annotation.AnnotationParser;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Expression;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
 
@@ -20,46 +18,88 @@ import static org.mockito.Mockito.*;
  */
 class LikePredicateBuilderTest {
 
-    private static Stream<Arguments> directionArguments() {
-        return Stream.of(
-            Arguments.of("some value", Like.DIRECTION.NONE, "some value"),
-            Arguments.of("some value", Like.DIRECTION.AROUND, "%some value%"),
-            Arguments.of("some value", Like.DIRECTION.RIGHT, "some value%"),
-            Arguments.of("some value", Like.DIRECTION.LEFT, "%some value")
-        );
+    private static final String PERCENT = "%";
+
+    private CriteriaBuilder cb;
+    private Expression expression;
+    private Expression valueExpression;
+
+    @BeforeEach
+    void setUp() {
+        cb = mock(CriteriaBuilder.class);
+        expression = mock(Expression.class);
+        valueExpression = mock(Expression.class);
+
+        when(valueExpression.as(String.class)).thenReturn(valueExpression);
+        when(expression.as(String.class)).thenReturn(expression);
     }
 
-    @ParameterizedTest
-    @MethodSource("directionArguments")
-    void shouldCallLikeCaseSensitive(String value, Like.DIRECTION direction, String expectedValue) {
-        CriteriaBuilder cb = mock(CriteriaBuilder.class);
-        Expression expression = mock(Expression.class);
-        Like like = getLike(direction, true);
-        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, value, expression);
+    @Test
+    void shouldCallLikeCaseSensitiveAround() {
+        Expression leftLikeExpression = mock(Expression.class);
+        Expression aroundLikeExpression = mock(Expression.class);
+        Like like = getLike(Like.DIRECTION.AROUND, true);
 
-        when(expression.as(String.class)).thenReturn(expression);
+        when(cb.concat(PERCENT, valueExpression)).thenReturn(leftLikeExpression);
+        when(cb.concat(leftLikeExpression, PERCENT)).thenReturn(aroundLikeExpression);
 
+        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, valueExpression, expression);
         builder.build();
 
-        verify(cb).like(expression, expectedValue);
+        verify(cb).like(expression, aroundLikeExpression);
     }
 
-    @ParameterizedTest
-    @MethodSource("directionArguments")
-    void shouldCallLikeUpper(String value, Like.DIRECTION direction, String expectedValue) {
-        CriteriaBuilder cb = mock(CriteriaBuilder.class);
-        Expression expression = mock(Expression.class);
-        Expression upperExpression = mock(Expression.class);
+    @Test
+    void shouldCallLikeCaseSensitiveLeft() {
+        Expression leftLikeExpression = mock(Expression.class);
+        Like like = getLike(Like.DIRECTION.LEFT, true);
 
-        Like like = getLike(direction, false);
-        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, value, expression);
+        when(cb.concat(PERCENT, valueExpression)).thenReturn(leftLikeExpression);
 
-        when(expression.as(String.class)).thenReturn(expression);
-        when(cb.upper(expression)).thenReturn(upperExpression);
-
+        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, valueExpression, expression);
         builder.build();
 
-        verify(cb).like(upperExpression, expectedValue.toUpperCase());
+        verify(cb).like(expression, leftLikeExpression);
+    }
+
+    @Test
+    void shouldCallLikeCaseSensitiveRight() {
+        Expression rightLikeExpression = mock(Expression.class);
+        Like like = getLike(Like.DIRECTION.RIGHT, true);
+
+        when(cb.concat(valueExpression, PERCENT)).thenReturn(rightLikeExpression);
+
+        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, valueExpression, expression);
+        builder.build();
+
+        verify(cb).like(expression, rightLikeExpression);
+    }
+
+    @Test
+    void shouldCallLikeCaseSensitiveNone() {
+        Like like = getLike(Like.DIRECTION.NONE, true);
+
+        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, valueExpression, expression);
+        builder.build();
+
+        verify(cb).like(expression, valueExpression);
+    }
+
+    @Test
+    void shouldCallLikeUpper() {
+        Expression rightLikeExpression = mock(Expression.class);
+        Expression upperValueExpression = mock(Expression.class);
+        Expression upperFieldExpression = mock(Expression.class);
+        Like like = getLike(Like.DIRECTION.RIGHT, false);
+
+        when(cb.concat(valueExpression, PERCENT)).thenReturn(rightLikeExpression);
+        when(cb.upper(rightLikeExpression)).thenReturn(upperValueExpression);
+        when(cb.upper(expression)).thenReturn(upperFieldExpression);
+
+        LikePredicateBuilder builder = new LikePredicateBuilder(cb, like, valueExpression, expression);
+        builder.build();
+
+        verify(cb).like(upperFieldExpression, upperValueExpression);
     }
 
     private Like getLike(Like.DIRECTION direction, boolean caseSensitive) {

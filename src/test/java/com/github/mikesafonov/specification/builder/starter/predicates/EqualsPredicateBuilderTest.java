@@ -15,13 +15,13 @@ class EqualsPredicateBuilderTest {
     @Test
     void shouldCallEqualsOnExpression(){
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
-        Object value = "Some value";
         Expression expression = mock(Expression.class);
-        EqualsPredicateBuilder builder = new EqualsPredicateBuilder(cb, value, expression);
+        Expression valueExpression = mock(Expression.class);
+        EqualsPredicateBuilder builder = new EqualsPredicateBuilder(cb, valueExpression, expression);
 
         builder.build();
 
-        verify(cb).equal(expression, value);
+        verify(cb).equal(expression, valueExpression);
         verifyNoMoreInteractions(expression);
     }
 }

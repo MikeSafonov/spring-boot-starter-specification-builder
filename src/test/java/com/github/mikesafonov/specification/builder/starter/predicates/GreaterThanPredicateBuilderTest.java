@@ -15,13 +15,13 @@ class GreaterThanPredicateBuilderTest {
     @Test
     void shouldCallGreaterThanOnExpression() {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
-        String value = "Some value";
         Expression expression = mock(Expression.class);
-        GreaterThanPredicateBuilder builder = new GreaterThanPredicateBuilder(cb, value, expression);
+        Expression valueExpression = mock(Expression.class);
+        GreaterThanPredicateBuilder builder = new GreaterThanPredicateBuilder(cb, valueExpression, expression);
 
         builder.build();
 
-        verify(cb).greaterThan(expression, value);
+        verify(cb).greaterThan(expression, valueExpression);
         verifyNoMoreInteractions(expression);
     }
 }

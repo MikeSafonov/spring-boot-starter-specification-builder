@@ -8,12 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author MikeSafonov
@@ -106,6 +108,8 @@ class PredicateBuilderFactoryTest {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
         Root root = mock(Root.class);
         CriteriaQuery cq = mock(CriteriaQuery.class);
+
+        when(cb.literal(value)).thenReturn(mock(Expression.class));
 
         Field field = CarFilter.class.getDeclaredField(fieldName);
         return new PredicateBuilderFactory().createPredicateBuilder(root, cb, cq, new FieldWithValue(field, value));
