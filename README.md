@@ -557,6 +557,32 @@ public class ClientContractNumberFilter {
 }
 ```
 
+### Function wrapping
+
+`Function` annotation allow wrap entity field or/and filter value with function. It can be used with another predicate annotation.
+
+Entity:
+```java
+@Entity
+@Table(name = "car_models")
+public class CarModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "name")
+    private String name;
+}
+```
+
+Filter:
+```java
+public class CarFilter {
+    @Function(name = "LOWER", wrapping = Function.FunctionWrapping.FILTER)
+    @Like
+    private String name;
+}
+```
+
 ## Debug
 
 You may turn on additional logging to debug created predicates:
