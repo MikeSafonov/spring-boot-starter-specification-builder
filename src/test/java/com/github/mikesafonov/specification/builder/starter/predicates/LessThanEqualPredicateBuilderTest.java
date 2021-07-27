@@ -15,13 +15,13 @@ class LessThanEqualPredicateBuilderTest {
     @Test
     void shouldCallLessThanEqualOnExpression() {
         CriteriaBuilder cb = mock(CriteriaBuilder.class);
-        String value = "Some value";
         Expression expression = mock(Expression.class);
-        LessThanEqualPredicateBuilder builder = new LessThanEqualPredicateBuilder(cb, value, expression);
+        Expression valueExpression = mock(Expression.class);
+        LessThanEqualPredicateBuilder builder = new LessThanEqualPredicateBuilder(cb, valueExpression, expression);
 
         builder.build();
 
-        verify(cb).lessThanOrEqualTo(expression, value);
+        verify(cb).lessThanOrEqualTo(expression, valueExpression);
         verifyNoMoreInteractions(expression);
     }
 }

@@ -31,25 +31,25 @@ public class SegmentIntersectionPredicateBuilder<T> implements PredicateBuilder 
         Predicate predicate = cb.and();
 
         if (from == null && to != null) {
-            predicate = new LessThanEqualPredicateBuilder(cb, to, fromField).build();
+            predicate = new LessThanEqualPredicateBuilder(cb, cb.literal(to), fromField).build();
         } else if (from != null && to == null) {
             predicate = cb.or(
                 toField.isNull(),
-                new GreaterThanEqualPredicateBuilder(cb, from, toField).build()
+                new GreaterThanEqualPredicateBuilder(cb, cb.literal(from), toField).build()
             );
         } else if (from != null) {
             predicate =
                 cb.or(
                     cb.and(
-                        new LessThanEqualPredicateBuilder(cb, from, fromField).build(),
+                        new LessThanEqualPredicateBuilder(cb, cb.literal(from), fromField).build(),
                         cb.or(
                             toField.isNull(),
-                            new GreaterThanEqualPredicateBuilder(cb, from, toField).build()
+                            new GreaterThanEqualPredicateBuilder(cb, cb.literal(from), toField).build()
                         )
                     ),
                     cb.and(
-                        new GreaterThanEqualPredicateBuilder(cb, from, fromField).build(),
-                        new LessThanEqualPredicateBuilder(cb, to, fromField).build()
+                        new GreaterThanEqualPredicateBuilder(cb, cb.literal(from), fromField).build(),
+                        new LessThanEqualPredicateBuilder(cb, cb.literal(to), fromField).build()
                     )
                 );
         }

@@ -17,37 +17,37 @@ public class LikePredicateBuilder extends SimplePredicateBuilder {
 
     private final CriteriaBuilder cb;
     private final Like like;
-    private final Object fieldValue;
+    private final Expression<String> valueExpression;
 
-    public LikePredicateBuilder(CriteriaBuilder cb, Like like, Object fieldValue, Expression expression) {
+    public LikePredicateBuilder(CriteriaBuilder cb, Like like, Expression<?> valueExpression, Expression expression) {
         super(expression);
         this.cb = cb;
         this.like = like;
-        this.fieldValue = fieldValue;
+        this.valueExpression = valueExpression.as(String.class);
     }
 
 
     @Override
     public Predicate build() {
-        String searchValue = getSearchValue();
+        Expression<String> searchExpression = getSearchValue();
         Expression<String> expr = expression.as(String.class);
         if (!like.caseSensitive()) {
             expr = cb.upper(expr);
-            searchValue = searchValue.toUpperCase();
+            searchExpression = cb.upper(searchExpression);
         }
-        return cb.like(expr, searchValue);
+        return cb.like(expr, searchExpression);
     }
 
-    private String getSearchValue() {
+    private Expression<String> getSearchValue() {
         switch (like.direction()) {
             case LEFT:
-                return PERCENT + fieldValue;
+                return cb.concat(PERCENT, valueExpression);
             case RIGHT:
-                return fieldValue + PERCENT;
+                return cb.concat(valueExpression, PERCENT);
             case NONE:
-                return fieldValue.toString();
+                return valueExpression;
             default:
-                return PERCENT + fieldValue + PERCENT;
+                return cb.concat(cb.concat(PERCENT, valueExpression), PERCENT);
         }
     }
 }

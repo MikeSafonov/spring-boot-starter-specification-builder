@@ -28,6 +28,8 @@ class SegmentIntersectionPredicateBuilderTest {
     private ExpressionBuilder expressionBuilder;
     private Expression fromField;
     private Expression toField;
+    private Expression fromExpression;
+    private Expression toExpression;
 
     private SegmentIntersectionPredicateBuilder<Integer> predicateBuilder;
 
@@ -40,6 +42,8 @@ class SegmentIntersectionPredicateBuilderTest {
         expressionBuilder = mock(ExpressionBuilder.class);
         fromField = mock(Expression.class);
         toField = mock(Expression.class);
+        fromExpression = mock(Expression.class);
+        toExpression = mock(Expression.class);
         String fromFieldName = "fromField";
         String toFieldName = "toField";
 
@@ -55,11 +59,13 @@ class SegmentIntersectionPredicateBuilderTest {
         @BeforeEach
         void setUp() {
             filter = new SegmentFilter<>(null, 1);
+
+            when(cb.literal(filter.getTo())).thenReturn(toExpression);
         }
 
         @Test
         void shouldReturnLessThenEqualsPredicate() {
-            Predicate lessThanEqualsPredicate = new LessThanEqualPredicateBuilder(cb, filter.getTo(), fromField).build();
+            Predicate lessThanEqualsPredicate = new LessThanEqualPredicateBuilder(cb, toExpression, fromField).build();
 
             predicateBuilder = new SegmentIntersectionPredicateBuilder<>(
                 root,
@@ -82,13 +88,15 @@ class SegmentIntersectionPredicateBuilderTest {
         @BeforeEach
         void setUp() {
             filter = new SegmentFilter<>(1, null);
+
+            when(cb.literal(filter.getFrom())).thenReturn(fromExpression);
         }
 
         @Test
         void shouldReturnIsNullOrGreaterThenEqualsPredicate() {
             Predicate toFieldIsNull = mock(Predicate.class);
             Predicate orPredicate = mock(Predicate.class);
-            Predicate greaterThanEqualsPredicate = new GreaterThanEqualPredicateBuilder(cb, filter.getFrom(), toField).build();
+            Predicate greaterThanEqualsPredicate = new GreaterThanEqualPredicateBuilder(cb, fromExpression, toField).build();
 
             when(toField.isNull()).thenReturn(toFieldIsNull);
             when(cb.or(toFieldIsNull, greaterThanEqualsPredicate)).thenReturn(orPredicate);
@@ -114,21 +122,24 @@ class SegmentIntersectionPredicateBuilderTest {
         @BeforeEach
         void setUp() {
             filter = new SegmentFilter<>(1, 2);
+
+            when(cb.literal(filter.getFrom())).thenReturn(fromExpression);
+            when(cb.literal(filter.getTo())).thenReturn(toExpression);
         }
 
         @Test
         void shouldReturnIntersectionPredicate() {
             Predicate fieldFromLessThanEqualsFilterFromPredicate
-                = new LessThanEqualPredicateBuilder(cb, filter.getFrom(), fromField).build();
+                = new LessThanEqualPredicateBuilder(cb, fromExpression, fromField).build();
             Predicate toFieldIsNull = mock(Predicate.class);
             Predicate fieldToGreaterThanEqualsFilterFromPredicate
-                = new GreaterThanEqualPredicateBuilder(cb, filter.getFrom(), toField).build();
+                = new GreaterThanEqualPredicateBuilder(cb, fromExpression, toField).build();
             Predicate entitySegmentIncludesFilterToPredicate = mock(Predicate.class);
             Predicate filterSegmentRightOffsetPredicate = mock(Predicate.class);
             Predicate fieldFromGreaterThanEqualsFilterFromPredicate
-                = new GreaterThanEqualPredicateBuilder(cb, filter.getFrom(), fromField).build();
+                = new GreaterThanEqualPredicateBuilder(cb, fromExpression, fromField).build();
             Predicate fieldFromLessThanEqualsFilterToPredicate
-                = new LessThanEqualPredicateBuilder(cb, filter.getTo(), fromField).build();
+                = new LessThanEqualPredicateBuilder(cb, toExpression, fromField).build();
             Predicate filterSegmentLeftOffsetPredicate = mock(Predicate.class);
             Predicate orPredicate = mock(Predicate.class);
 

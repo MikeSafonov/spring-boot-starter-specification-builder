@@ -11,16 +11,16 @@ import javax.persistence.criteria.Predicate;
 public class GreaterThanPredicateBuilder extends SimplePredicateBuilder {
 
     private final CriteriaBuilder cb;
-    private final Object fieldValue;
+    private final Expression valueExpression;
 
-    public GreaterThanPredicateBuilder(CriteriaBuilder cb, Object fieldValue, Expression expression) {
+    public GreaterThanPredicateBuilder(CriteriaBuilder cb, Expression valueExpression, Expression expression) {
         super(expression);
         this.cb = cb;
-        this.fieldValue = fieldValue;
+        this.valueExpression = valueExpression;
     }
 
     @Override
     public Predicate build() {
-        return cb.greaterThan(expression, (Comparable) fieldValue);
+        return cb.greaterThan(expression, valueExpression);
     }
 }

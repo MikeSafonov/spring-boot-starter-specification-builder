@@ -11,16 +11,16 @@ import javax.persistence.criteria.Predicate;
 public class LessThanEqualPredicateBuilder extends SimplePredicateBuilder {
 
     private final CriteriaBuilder cb;
-    private final Object fieldValue;
+    private final Expression valueExpression;
 
-    public LessThanEqualPredicateBuilder(CriteriaBuilder cb, Object fieldValue, Expression expression) {
+    public LessThanEqualPredicateBuilder(CriteriaBuilder cb, Expression valueExpression, Expression expression) {
         super(expression);
         this.cb = cb;
-        this.fieldValue = fieldValue;
+        this.valueExpression = valueExpression;
     }
 
     @Override
     public Predicate build() {
-        return cb.lessThanOrEqualTo(expression, (Comparable) fieldValue);
+        return cb.lessThanOrEqualTo(expression, valueExpression);
     }
 }

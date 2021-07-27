@@ -77,17 +77,17 @@ public class PredicateBuilderFactory {
             return new CollectionPredicateBuilder(field.getValueAsCollection(), expression);
         }
         if (field.isAnnotatedBy(Like.class)) {
-            return new LikePredicateBuilder(cb, field.getAnnotation(Like.class), field.getValue(),
+            return new LikePredicateBuilder(cb, field.getAnnotation(Like.class), cb.literal(field.getValue()),
                 expression);
         } else if (field.isAnnotatedBy(GreaterThan.class)) {
-            return new GreaterThanPredicateBuilder(cb, field.getValue(), expression);
+            return new GreaterThanPredicateBuilder(cb, cb.literal(field.getValue()), expression);
         } else if (field.isAnnotatedBy(GreaterThanEqual.class)) {
-            return new GreaterThanEqualPredicateBuilder(cb, field.getValue(), expression);
+            return new GreaterThanEqualPredicateBuilder(cb, cb.literal(field.getValue()), expression);
         } else if (field.isAnnotatedBy(LessThan.class)) {
-            return new LessThanPredicateBuilder(cb, field.getValue(), expression);
+            return new LessThanPredicateBuilder(cb, cb.literal(field.getValue()), expression);
         } else if (field.isAnnotatedBy(LessThanEqual.class)) {
-            return new LessThanEqualPredicateBuilder(cb, field.getValue(), expression);
+            return new LessThanEqualPredicateBuilder(cb, cb.literal(field.getValue()), expression);
         }
-        return new EqualsPredicateBuilder(cb, field.getValue(), expression);
+        return new EqualsPredicateBuilder(cb, cb.literal(field.getValue()), expression);
     }
 }

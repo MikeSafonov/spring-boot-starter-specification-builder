@@ -12,16 +12,16 @@ import javax.persistence.criteria.Predicate;
 public class EqualsPredicateBuilder extends SimplePredicateBuilder {
 
     private final CriteriaBuilder cb;
-    private final Object fieldValue;
+    private final Expression<?> valueExpression;
 
-    public EqualsPredicateBuilder(CriteriaBuilder cb, Object fieldValue, Expression expression) {
+    public EqualsPredicateBuilder(CriteriaBuilder cb, Expression<?> valueExpression, Expression expression) {
         super(expression);
         this.cb = cb;
-        this.fieldValue = fieldValue;
+        this.valueExpression = valueExpression;
     }
 
     @Override
     public Predicate build() {
-        return cb.equal(expression, fieldValue);
+        return cb.equal(expression, valueExpression);
     }
 }
