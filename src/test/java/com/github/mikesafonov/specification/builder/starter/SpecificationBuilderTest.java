@@ -11,7 +11,11 @@ import com.github.mikesafonov.specification.builder.starter.base.studens.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.system.CapturedOutput;
@@ -27,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -557,5 +562,26 @@ class SpecificationBuilderTest {
 
         }
 
+    }
+
+    @Nested
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    class Function extends BaseTest {
+
+        @ParameterizedTest
+        @MethodSource("functionProvider")
+        void shouldWrapWithFunction(FunctionCarFilter filter) {
+            List<CarModel> models = carModelRepository.findAll(specificationBuilder.buildSpecification(filter));
+            assertEquals(1, models.size());
+            assertThat(models).extracting("id").containsOnly(2);
+        }
+
+        private Stream<Arguments> functionProvider() {
+            return Stream.of(
+                Arguments.of(FunctionCarFilter.bothWrap("VOLVO")),
+                Arguments.of(FunctionCarFilter.fieldWrap("VOLVO")),
+                Arguments.of(FunctionCarFilter.filterWrap("VOLVO"))
+            );
+        }
     }
 }
