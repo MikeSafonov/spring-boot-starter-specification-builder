@@ -29,7 +29,7 @@ public class SpecificationBuilder {
             .filter(Objects::nonNull)
             .collect(toList());
 
-        return new SelfBuildSpecification<>(fieldsForPredicate, useDistinct(filter.getClass()));
+        return new SelfBuildSpecification<>(fieldsForPredicate, filter.getClass().isAnnotationPresent(Distinct.class));
     }
 
     private boolean isFieldSupported(@NonNull Field field) {
@@ -44,10 +44,5 @@ public class SpecificationBuilder {
             return new FieldWithValue(field, fieldValue);
         }
         return null;
-    }
-
-    private boolean useDistinct(@NonNull Class<?> filterClass) {
-        Distinct distinct = filterClass.getAnnotation(Distinct.class);
-        return distinct != null;
     }
 }
