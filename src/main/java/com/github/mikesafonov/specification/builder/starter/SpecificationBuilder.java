@@ -29,7 +29,10 @@ public class SpecificationBuilder {
             .filter(Objects::nonNull)
             .collect(toList());
 
-        return new SelfBuildSpecification<>(fieldsForPredicate, filter.getClass().isAnnotationPresent(Distinct.class));
+        return SelfBuildSpecificationBuilder.get()
+            .useDistinct(filter.getClass().isAnnotationPresent(Distinct.class))
+            .fields(fieldsForPredicate)
+            .build();
     }
 
     private boolean isFieldSupported(@NonNull Field field) {
