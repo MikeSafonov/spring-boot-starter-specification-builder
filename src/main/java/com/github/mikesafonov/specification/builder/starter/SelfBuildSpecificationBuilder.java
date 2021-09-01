@@ -1,5 +1,8 @@
 package com.github.mikesafonov.specification.builder.starter;
 
+import com.github.mikesafonov.specification.builder.starter.query.DistinctQueryProcessor;
+import com.github.mikesafonov.specification.builder.starter.query.QueryProcessor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,19 +11,25 @@ import java.util.List;
  */
 public class SelfBuildSpecificationBuilder {
 
+    private final Class<?> filterClass;
+    private final List<QueryProcessor> queryProcessors = new ArrayList<>();
     private final List<FieldWithValue> fields = new ArrayList<>();
-    private boolean useDistinct = false;
 
-    public static SelfBuildSpecificationBuilder get() {
-        return new SelfBuildSpecificationBuilder();
+    private SelfBuildSpecificationBuilder(Class<?> filterClass) {
+        this.filterClass = filterClass;
+    }
+
+    public static SelfBuildSpecificationBuilder get(Class<?> filterClass) {
+        return new SelfBuildSpecificationBuilder(filterClass);
+    }
+
+    public SelfBuildSpecificationBuilder queryProcessors(List<QueryProcessor> queryProcessors) {
+        this.queryProcessors.addAll(queryProcessors);
+        return this;
     }
 
     public SelfBuildSpecificationBuilder useDistinct() {
-        return useDistinct(true);
-    }
-
-    public SelfBuildSpecificationBuilder useDistinct(boolean value) {
-        this.useDistinct = value;
+        queryProcessors.add(new DistinctQueryProcessor(filterClass));
         return this;
     }
 
@@ -30,7 +39,7 @@ public class SelfBuildSpecificationBuilder {
     }
 
     public <S> SelfBuildSpecification<S> build() {
-        return new SelfBuildSpecification<>(fields, useDistinct);
+        return new SelfBuildSpecification<>(queryProcessors, fields);
     }
 
 }

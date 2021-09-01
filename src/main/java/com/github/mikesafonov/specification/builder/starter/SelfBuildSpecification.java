@@ -1,6 +1,7 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 import com.github.mikesafonov.specification.builder.starter.predicates.PredicateBuilderFactory;
+import com.github.mikesafonov.specification.builder.starter.query.QueryProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,17 +19,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SelfBuildSpecification<S> implements Specification<S> {
 
+    private final List<QueryProcessor> queryProcessors;
     private final List<FieldWithValue> fieldsForPredicate;
-    private final boolean useDistinct;
 
-    public SelfBuildSpecification(List<FieldWithValue> fieldsForPredicate) {
-        this(fieldsForPredicate, false);
-    }
 
     @Override
     public Predicate toPredicate(Root<S> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+        queryProcessors.forEach(queryProcessor -> queryProcessor.process(query));
+
         PredicateBuilderFactory factory = new PredicateBuilderFactory();
-        query.distinct(useDistinct);
         Predicate[] predicates = fieldsForPredicate.stream()
             .map(field -> factory.createPredicateBuilder(root, cb, query, field).build())
             .toArray(Predicate[]::new);

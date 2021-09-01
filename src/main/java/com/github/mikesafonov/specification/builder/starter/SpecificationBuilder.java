@@ -1,7 +1,6 @@
 package com.github.mikesafonov.specification.builder.starter;
 
 
-import com.github.mikesafonov.specification.builder.starter.annotations.Distinct;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.NonNull;
 
@@ -29,8 +28,8 @@ public class SpecificationBuilder {
         Objects.requireNonNull(filter);
         List<FieldWithValue> fieldsForPredicate = fieldResolver.resolve(filter).collect(toList());
 
-        return SelfBuildSpecificationBuilder.get()
-            .useDistinct(filter.getClass().isAnnotationPresent(Distinct.class))
+        return SelfBuildSpecificationBuilder.get(filter.getClass())
+            .useDistinct()
             .fields(fieldsForPredicate)
             .build();
     }
