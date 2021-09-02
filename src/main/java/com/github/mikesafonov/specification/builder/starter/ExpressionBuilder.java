@@ -4,10 +4,7 @@ import com.github.mikesafonov.specification.builder.starter.annotations.Join;
 import com.github.mikesafonov.specification.builder.starter.annotations.Joins;
 import org.springframework.lang.NonNull;
 
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.From;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +21,22 @@ public class ExpressionBuilder {
 
     private final JoinBuilder joinBuilder = new JoinBuilder();
     private final Map<String, javax.persistence.criteria.Join<?, ?>> joinCache = new HashMap<>();
+
+    @NonNull
+    public <E> FieldWithValueExpression toFieldWithValueExpression(@NonNull FieldWithValue field,
+                                                                   @NonNull CriteriaBuilder cb,
+                                                                   @NonNull Root<E> root,
+                                                                   @NonNull Predicate... restrictions) {
+        return new FieldWithValueExpression(
+            getExpression(root, field, restrictions),
+            valueAsExpression(field, cb)
+        );
+    }
+
+    @NonNull
+    public <E> Expression valueAsExpression(@NonNull FieldWithValue field, @NonNull CriteriaBuilder cb) {
+        return field.getValue() != null ? cb.literal(field.getValue()) : cb.nullLiteral(Object.class);
+    }
 
     /**
      * @param root         entity root

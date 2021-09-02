@@ -55,7 +55,7 @@ public class PredicateBuilderFactory {
             );
         }
 
-        return getSimplePredicateBuilder(cb, field, expressionBuilder.getExpression(root, field));
+        return getSimplePredicateBuilder(cb, field, expressionBuilder.toFieldWithValueExpression(field, cb, root));
     }
 
     private PredicateBuilder getSimplePredicateBuilder(CriteriaBuilder cb,
@@ -64,8 +64,14 @@ public class PredicateBuilderFactory {
         FieldWithValueExpression fieldWithValueExpression =
             new FieldWithValueExpression(
                 expression,
-                field.getValue() != null ? cb.literal(field.getValue()) : cb.nullLiteral(Object.class)
+                expressionBuilder.valueAsExpression(field, cb)
             );
+        return getSimplePredicateBuilder(cb, field, fieldWithValueExpression);
+    }
+
+    private PredicateBuilder getSimplePredicateBuilder(CriteriaBuilder cb,
+                                                       FieldWithValue field,
+                                                       FieldWithValueExpression fieldWithValueExpression) {
         if (field.isAnnotatedBy(Function.class)) {
             fieldWithValueExpression =
                 functionWrapper.wrapByFunction(cb, field.getAnnotation(Function.class), fieldWithValueExpression);
