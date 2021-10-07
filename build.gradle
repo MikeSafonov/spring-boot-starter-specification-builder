@@ -40,10 +40,10 @@ dependencies {
     implementation ("org.slf4j:slf4j-api")
     implementation ("org.apache.commons:commons-lang3")
 
-    compileOnly ("org.projectlombok:lombok:1.18.20")
+    compileOnly ("org.projectlombok:lombok:1.18.22")
     annotationProcessor ("org.projectlombok:lombok:1.18.20")
 
-    testCompileOnly ("org.projectlombok:lombok:1.18.16")
+    testCompileOnly ("org.projectlombok:lombok:1.18.22")
     testAnnotationProcessor ("org.projectlombok:lombok:1.18.16")
     testImplementation ("org.springframework.boot:spring-boot-starter-test")
     testImplementation ("com.h2database:h2:1.4.200")
