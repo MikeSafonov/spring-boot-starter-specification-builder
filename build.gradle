@@ -46,7 +46,7 @@ dependencies {
     testCompileOnly ("org.projectlombok:lombok:1.18.16")
     testAnnotationProcessor ("org.projectlombok:lombok:1.18.16")
     testImplementation ("org.springframework.boot:spring-boot-starter-test")
-    testImplementation ("com.h2database:h2:1.4.200")
+    testImplementation ("com.h2database:h2:2.1.212")
 }
 
 task sourceJar(type: Jar) {
